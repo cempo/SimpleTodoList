@@ -1,0 +1,1 @@
+- API to the data sources (e.g. Retrofit for REST API, Room for local persistence, External content providers)

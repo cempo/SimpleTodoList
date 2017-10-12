@@ -1,11 +1,119 @@
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">#42a5f5</item>
+        <item name="colorPrimaryDark">#0077c2</item>
+        <!--<item name="colorPrimaryLight">#80d6ff</item>-->
+        <item name="android:colorAccent">#66bb6a</item>
+        <item name="android:textColorPrimary">#212121</item>
+        <item name="android:textColorSecondary">#757575</item>
+        <item name="android:textColorPrimaryInverse">#e1e7ef</item>
+        <item name="android:textColorSecondaryInverse">#9E9E9E</item>
+        <item name="android:divider">#BDBDBD</item>
+        <item name="drawerArrowStyle">@style/MaterialDrawer.DrawerArrowStyle</item>
+
+        <!--<item name="android:windowTranslucentStatus">true</item>-->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">#0077c2</item>
+        <item name="android:navigationBarColor">#42a5f5</item>
+
+        <!-- Custom -->
+        <item name="toolbarIconColor">#ffffff</item>
+        <item name="toolbarTitleColor">#ffffff</item>
+        <item name="iconColor">#ffffff</item>
+        <item name="iconColorInverse">#212121</item>
     </style>
 
+    <style name="AppThemeDark" parent="AppTheme">
+        <item name="colorPrimary">#ef5350</item>
+        <!--<item name="colorPrimaryLight">#ff867c</item>-->
+        <item name="colorPrimaryDark">#b61827</item>
+        <item name="colorAccent">#ffc107</item>
+    </style>
+    <!-- Toolbar -->
+    <style name="ToolbarStyle" parent="Widget.AppCompat.Toolbar">
+        <item name="android:minHeight">?attr/actionBarSize</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="theme">@style/ToolbarTheme</item>
+        <item name="android:background">?colorPrimary</item>
+    </style>
+
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <!-- Color used for the title of the Toolbar - as long as not overridden -->
+        <item name="android:textColorPrimary">?toolbarTitleColor</item>
+        <!-- Used to color back button and three dots -->
+        <item name="android:textColorSecondary">?toolbarIconColor</item>
+        <item name="android:colorControlNormal">?toolbarIconColor</item>
+        <item name="colorControlNormal">?toolbarIconColor</item>
+    </style>
+    <!-- FAB -->
+    <style name="FabButtonNormal">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:tint">@android:color/white</item>
+        <item name="android:layout_margin">@dimen/fab_margin</item>
+    </style>
+    <!-- RecyclerView -->
+    <style name="TodayTaskRecyclerViewStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:clipChildren">true</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:layout_marginTop">@dimen/activity_vertical_margin</item>
+        <item name="android:paddingBottom">@dimen/activity_vertical_margin</item>
+        <item name="android:paddingLeft">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingRight">@dimen/activity_horizontal_margin</item>
+        <item name="android:scrollbarStyle">outsideOverlay</item>
+        <item name="android:scrollbars">vertical</item>
+    </style>
+    <!-- Today task item -->
+    <style name="TodayTaskItemStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="TodayTaskBehindItemStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="TodayTaskBehindIconStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+    </style>
+
+    <style name="TodayTaskItemContentStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:layout_margin">6dp</item>
+        <item name="android:background">@drawable/bg_today_item_normal_state</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="TodayTaskItemDateStyle">
+        <item name="android:textAppearance">@style/TextAppearance.ListItem.TodayTasks.Date</item>
+        <item name="android:layout_width">45dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="TodayTaskItemTitleStyle">
+        <item name="android:textAppearance">@style/TextAppearance.ListItem.TodayTasks.Title</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxLines">3</item>
+    </style>
 </resources>

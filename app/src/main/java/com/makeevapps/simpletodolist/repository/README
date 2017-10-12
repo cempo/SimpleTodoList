@@ -1,0 +1,3 @@
+- The complete data model for the app
+- Provides simple data modification and retrieval APIs
+- Coordinates fetching, syncing, persisting etc from different data sources

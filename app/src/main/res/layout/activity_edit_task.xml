@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="controller"
+            type="com.makeevapps.simpletodolist.ui.activity.EditTaskActivity"/>
+        <variable
+            name="model"
+            type="com.makeevapps.simpletodolist.viewmodel.EditTaskViewModel"/>
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <include
+            android:id="@+id/toolbar_include"
+            layout="@layout/toolbar"/>
+        <EditText
+            android:id="@+id/taskTitleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/task_name"
+            android:textSize="24sp"
+            android:onTextChanged="@{(text, start, before, count) -> controller.onTitleTextChanged(text)}"/>
+        <EditText
+            android:id="@+id/taskDescriptionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/task_description"
+            android:onTextChanged="@{(text, start, before, count) -> controller.onDescriptionTextChanged(text)}"/>
+        <TextView
+            android:id="@+id/dateTimeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Date/time"
+            android:padding="10dp"
+            android:onClick="@{controller.onDateTimeButtonClick}"/>
+        <!--<CheckBox
+            android:id="@+id/allDayCheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/all_day"
+            android:onCheckedChanged="@{(v, checked) -> controller.onAllDayCheckedChanged(checked)}"/>
+-->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/subTasksRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:src="@drawable/ic_add_black_24dp"
+            android:onClick="@{controller.addSubTaskButtonClick}"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:padding="20dp"
+            android:gravity="center"
+            android:text="Delete task"
+            android:onClick="@{controller::deleteTask}"/>
+    </LinearLayout>
+</layout>

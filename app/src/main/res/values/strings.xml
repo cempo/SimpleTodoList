@@ -1,3 +1,43 @@
 <resources>
     <string name="app_name">SimpleTodoList</string>
+    <string name="error_dialog_title">Error</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="cancel">Cancel</string>
+    <string name="undo">UNDO</string>
+
+    <!-- Permission request -->
+    <string name="permission_rationale_title">We need this permission</string>
+    <string name="permission_rationale_text">This permission is needed for doing some fancy stuff so please, allow it!</string>
+
+    <!-- Task priority -->
+    <string name="none_priority">None</string>
+    <string name="low_priority">Low</string>
+    <string name="medium_priority">Medium</string>
+    <string name="major_priority">Major</string>
+    <string name="critical_priority">Critical</string>
+
+    <!-- Menu -->
+    <string name="today">Today</string>
+    <string name="calendar">Calendar</string>
+    <string name="settings">Settings</string>
+
+    <!-- Task list -->
+    <string name="task_is_done">Done</string>
+    <string name="sub_tasks_count">%d sub tasks</string>
+
+    <!-- Create task -->
+    <string name="new_task">New task</string>
+    <string name="task_name">Task name</string>
+    <string name="task_description">Task description</string>
+    <string name="save">Save</string>
+    <string name="time">Time</string>
+    <string name="clear">Clear</string>
+    <string name="time_not_setup">Time not setup</string>
+    <string name="error_title_empty">Title can\'t be empty</string>
+    <string name="cancel_your_changes">Cancel your changes?</string>
+    <string name="change_sub_task">Change</string>
+    <string name="add_sub_task">Add</string>
+    <string name="all_day">All day</string>
+    <string name="date_in_the_past">You can\'t use time in the past</string>
 </resources>

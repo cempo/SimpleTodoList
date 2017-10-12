@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="status_bar">#0077c2</color>
+    <color name="materialize_primary_dark">#0077c2</color>
+
+    <!-- Today list -->
+    <color name="bg_swipe_done_item_right">#9E9E9E</color>
+    <color name="bg_swipe_todo_item_right">#ff2f8b2a</color>
+    <color name="bg_swipe_todo_item_left">#fff45f30</color>
+
+    <!-- Task priority -->
+    <color name="none_priority">#00000000</color>
+    <color name="low_priority">#6DB15C</color>
+    <color name="medium_priority">#E4C755</color>
+    <color name="major_priority">#DB7B47</color>
+    <color name="critical_priority">#CC0E31</color>
+
 </resources>

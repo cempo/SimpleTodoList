@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="toolbarIconColor" format="color"/>
+    <attr name="toolbarTitleColor" format="color"/>
+
+    <attr name="iconColor" format="color"/>
+    <attr name="iconColorInverse" format="color"/>
+
+    <attr name="dividerColor" format="color"/>
+</resources>
