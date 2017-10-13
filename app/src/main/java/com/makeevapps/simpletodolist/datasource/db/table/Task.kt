@@ -66,6 +66,11 @@ class Task() {
         return isExpiredForDate(startDayDate)
     }
 
+    fun isExpiredForCurrentTime(): Boolean {
+        val currentDate = DateUtils.currentTime()
+        return isExpiredForDate(currentDate)
+    }
+
     private fun isExpiredForDate(date: Date): Boolean = dueDate != null && dueDate!!.before(date)
 
     fun isNotPlaned() = dueDate == null

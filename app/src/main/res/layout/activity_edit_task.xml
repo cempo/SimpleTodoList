@@ -35,6 +35,28 @@
             android:text="Date/time"
             android:padding="10dp"
             android:onClick="@{controller.onDateTimeButtonClick}"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:gravity="center_vertical"
+            android:onClick="@{controller.changeTaskPriority}">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/priority"/>
+            <TextView
+                android:id="@+id/priorityNameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"/>
+            <View
+                android:id="@+id/priorityColorView"
+                android:layout_width="30dp"
+                android:layout_height="30dp"/>
+        </LinearLayout>
         <!--<CheckBox
             android:id="@+id/allDayCheckBox"
             android:layout_width="match_parent"

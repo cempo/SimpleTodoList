@@ -37,13 +37,18 @@
     </style>
     <!-- Today task -->
     <style name="TextAppearance.ListItem.TodayTasks.Title">
-        <item name="android:textSize">@dimen/text_size_16sp</item>
+        <item name="android:textSize">@dimen/text_size_20sp</item>
         <item name="android:textColor">?android:textColorPrimary</item>
+    </style>
+
+    <style name="TextAppearance.ListItem.TodayTasks.Description">
+        <item name="android:textSize">@dimen/text_size_14sp</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
     </style>
 
     <style name="TextAppearance.ListItem.TodayTasks.Date">
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">@dimen/text_size_14sp</item>
-        <item name="android:textColor">?android:textColorPrimaryInverse</item>
+        <item name="android:textSize">@dimen/text_size_18sp</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
     </style>
 </resources>

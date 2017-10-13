@@ -1,6 +1,9 @@
 package com.makeevapps.simpletodolist.ui.adapter
 
+import android.content.Context
 import android.databinding.DataBindingUtil
+import android.graphics.Paint
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.Gravity
@@ -18,13 +21,15 @@ import com.makeevapps.simpletodolist.R
 import com.makeevapps.simpletodolist.databinding.ListItemTodayTaskBinding
 import com.makeevapps.simpletodolist.dataproviders.TaskDataProvider
 import com.makeevapps.simpletodolist.interfaces.RecycleViewEventListener
+import com.makeevapps.simpletodolist.utils.DateUtils
+import com.makeevapps.simpletodolist.utils.extension.asString
 
-class TodayTaskAdapter(val eventListener: RecycleViewEventListener) : RecyclerView.Adapter<TodayTaskAdapter.MyViewHolder>(), SwipeableItemAdapter<TodayTaskAdapter.MyViewHolder> {
+class TodayTaskAdapter(val context: Context,
+                       val eventListener: RecycleViewEventListener) : RecyclerView.Adapter<TodayTaskAdapter.MyViewHolder>(), SwipeableItemAdapter<TodayTaskAdapter.MyViewHolder> {
     var dataProvider = TaskDataProvider()
 
-    companion object {
-        private val TAG = "MySwipeableItemAdapter"
-    }
+    var textColorSecondary = ContextCompat.getColor(context, R.color.text_color_secondary)
+    var textColorPrimary = ContextCompat.getColor(context, R.color.text_color_primary)
 
     init {
         setHasStableIds(true)
@@ -37,6 +42,10 @@ class TodayTaskAdapter(val eventListener: RecycleViewEventListener) : RecyclerVi
 
     inner class MyViewHolder(val view: View) : AbstractSwipeableItemViewHolder(view), View.OnClickListener {
         val binding: ListItemTodayTaskBinding = DataBindingUtil.bind(view)
+
+        init {
+            binding.contentLayout.setOnClickListener(this)
+        }
 
         override fun getSwipeableContainerView(): View? = binding.contentLayout
 
@@ -61,6 +70,32 @@ class TodayTaskAdapter(val eventListener: RecycleViewEventListener) : RecyclerVi
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val item = dataProvider.getItem(position)
         holder.binding.task = item.task
+
+        var dateString: String? = ""
+        if (item.task.isPlanedForToday()) {
+            dateString = if (item.task.allDay) {
+                context.getString(R.string.all_day)
+            } else {
+                item.task.dueDate?.asString(DateUtils.TIME_FORMAT)
+            }
+        } else if (item.task.isExpired()) {
+            dateString = item.task.dueDate?.asString(DateUtils.SHORT_DATE_FORMAT)
+        }
+
+        if (!dateString.isNullOrEmpty()) {
+            holder.binding.dateTextView?.visibility = View.VISIBLE
+            holder.binding.dateTextView?.text = dateString
+        } else {
+            holder.binding.dateTextView?.visibility = View.GONE
+        }
+
+        if (item.task.isComplete) {
+            holder.binding.nameTextView.paintFlags = holder.binding.nameTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            holder.binding.nameTextView.setTextColor(textColorSecondary)
+        } else {
+            holder.binding.nameTextView.paintFlags = holder.binding.nameTextView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            holder.binding.nameTextView.setTextColor(textColorPrimary)
+        }
 
         val swipeState = holder.swipeStateFlags
 
@@ -95,6 +130,7 @@ class TodayTaskAdapter(val eventListener: RecycleViewEventListener) : RecyclerVi
         var backgroundColor = 0
         var actionImageResId = 0
         var gravity = Gravity.CENTER
+        var visibility = View.GONE
 
         val item = dataProvider.getItem(position)
         when (type) {
@@ -102,29 +138,33 @@ class TodayTaskAdapter(val eventListener: RecycleViewEventListener) : RecyclerVi
                 backgroundColor = android.R.color.transparent
             }
             SwipeableItemConstants.DRAWABLE_SWIPE_LEFT_BACKGROUND -> {
+                visibility = View.VISIBLE
+                gravity = Gravity.END or Gravity.CENTER_VERTICAL
                 backgroundColor = R.color.bg_swipe_todo_item_left
                 actionImageResId = R.drawable.ic_clock_fast_24dp
             }
             SwipeableItemConstants.DRAWABLE_SWIPE_RIGHT_BACKGROUND -> {
+                visibility = View.VISIBLE
+                gravity = Gravity.START or Gravity.CENTER_VERTICAL
                 actionImageResId = R.drawable.ic_done_24dp
                 backgroundColor = if (item.task.isComplete) {
                     R.color.bg_swipe_done_item_right
                 } else {
                     R.color.bg_swipe_todo_item_right
                 }
-
             }
         }
 
-        holder.binding.behindLayout.gravity = gravity
-        holder.binding.behindLayout.setBackgroundResource(backgroundColor)
-        holder.binding.swipeActionImageView.setImageResource(actionImageResId)
+        holder.binding.behindLayout.visibility = visibility
+        if (visibility == View.VISIBLE) {
+            holder.binding.behindLayout.gravity = gravity
+            holder.binding.behindLayout.setBackgroundResource(backgroundColor)
+            holder.binding.swipeActionImageView.setImageResource(actionImageResId)
+        }
     }
 
 
     override fun onSwipeItem(holder: MyViewHolder, position: Int, result: Int): SwipeResultAction? {
-        Log.d(TAG, "onSwipeItem(position = $position, result = $result)")
-
         return when (result) {
             SwipeableItemConstants.RESULT_SWIPED_RIGHT -> SwipeRightResultAction(this, position)
             SwipeableItemConstants.RESULT_SWIPED_LEFT -> SwipeLeftResultAction(this, position)
@@ -162,25 +202,44 @@ class TodayTaskAdapter(val eventListener: RecycleViewEventListener) : RecyclerVi
         }
     }
 
-    private class SwipeRightResultAction internal constructor(private var adapterToday: TodayTaskAdapter?,
+    private class SwipeRightResultAction internal constructor(private var adapter: TodayTaskAdapter?,
                                                               private val position: Int) : SwipeResultActionRemoveItem() {
+        private var item = adapter!!.dataProvider.getItem(position) as TaskDataProvider.ConcreteData
+        private var newPosition: Int? = null
 
         override fun onPerformAction() {
             super.onPerformAction()
 
-            adapterToday!!.dataProvider.removeItem(position)
-            adapterToday!!.notifyItemRemoved(position)
+            val task = item.task
+            if (task.isComplete) {
+                task.isComplete = false
+                task.doneDate = null
+            } else {
+                task.isComplete = true
+                task.doneDate = DateUtils.currentTime()
+            }
+
+            val toPosition = adapter!!.dataProvider.getValidPosition(item)
+            newPosition = toPosition
+
+            if (toPosition != null) {
+                adapter!!.dataProvider.moveItem(position, toPosition)
+                adapter!!.notifyItemMoved(position, toPosition)
+            } else {
+                adapter!!.dataProvider.removeItem(position)
+                adapter!!.notifyItemRemoved(position)
+            }
         }
 
         override fun onSlideAnimationEnd() {
             super.onSlideAnimationEnd()
 
-            adapterToday!!.eventListener.onItemSwipeRight(position)
+            adapter!!.eventListener.onItemSwipeRight(position, newPosition)
         }
 
         override fun onCleanUp() {
             super.onCleanUp()
-            adapterToday = null
+            adapter = null
         }
     }
 }

@@ -19,6 +19,7 @@ import com.makeevapps.simpletodolist.ui.adapter.SubTaskAdapter
 import com.makeevapps.simpletodolist.ui.dialog.CancelChangesDialog
 import com.makeevapps.simpletodolist.ui.dialog.DateTimePickerDialog
 import com.makeevapps.simpletodolist.ui.dialog.EditSubTaskDialog
+import com.makeevapps.simpletodolist.ui.dialog.EditTaskPriorityDialog
 import com.makeevapps.simpletodolist.utils.DateUtils
 import com.makeevapps.simpletodolist.utils.ToastUtils
 import com.makeevapps.simpletodolist.utils.extension.asString
@@ -69,6 +70,8 @@ class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener {
                 binding.taskTitleTextView.setText(task.title)
                 binding.taskDescriptionTextView.setText(task.description)
                 binding.dateTimeTextView.text = task.dueDate?.asString(DateUtils.DATE_TIME_FORMAT)
+                binding.priorityNameTextView.setText(task.priority.textResId)
+                binding.priorityColorView.setBackgroundResource(task.priority.colorResId)
                 Logger.e("Refresh task")
             }
         })
@@ -113,6 +116,14 @@ class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener {
 
         })
         dateTimePicker.show(supportFragmentManager, "DateTimePickerDialog")
+    }
+
+    fun changeTaskPriority(view: View?) {
+        EditTaskPriorityDialog.showDialog(this, model.newTask.priority, onSuccess = { priority ->
+            model.newTask.priority = priority
+            binding.priorityNameTextView.setText(priority.textResId)
+            binding.priorityColorView.setBackgroundResource(priority.colorResId)
+        })
     }
 
     override fun onItemClick(view: View, position: Int) {

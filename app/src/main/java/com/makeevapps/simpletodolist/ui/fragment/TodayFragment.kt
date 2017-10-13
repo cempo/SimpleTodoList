@@ -19,14 +19,15 @@ import com.h6ah4i.android.widget.advrecyclerview.touchguard.RecyclerViewTouchAct
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils
 import com.makeevapps.simpletodolist.R
 import com.makeevapps.simpletodolist.databinding.FragmentTodayBinding
-import com.makeevapps.simpletodolist.dataproviders.AbstractDataProvider
 import com.makeevapps.simpletodolist.dataproviders.TaskDataProvider
+import com.makeevapps.simpletodolist.dataproviders.TaskDataProvider.ConcreteData
 import com.makeevapps.simpletodolist.datasource.db.table.Task
 import com.makeevapps.simpletodolist.interfaces.RecycleViewEventListener
 import com.makeevapps.simpletodolist.ui.activity.EditTaskActivity
 import com.makeevapps.simpletodolist.ui.activity.MainActivity
 import com.makeevapps.simpletodolist.ui.adapter.TodayTaskAdapter
 import com.makeevapps.simpletodolist.ui.dialog.DateTimePickerDialog
+import com.makeevapps.simpletodolist.utils.DateUtils
 import com.makeevapps.simpletodolist.viewmodel.TodayViewModel
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.toolbar.*
@@ -83,7 +84,7 @@ class TodayFragment : Fragment(), RecycleViewEventListener {
         touchActionGuardManager.setInterceptVerticalScrollingWhileAnimationRunning(true)
         touchActionGuardManager.isEnabled = true
 
-        adapter = TodayTaskAdapter(this)
+        adapter = TodayTaskAdapter(context, this)
         wrappedAdapter = swipeManager.createWrappedAdapter(adapter)
 
         val animator = SwipeDismissItemAnimator()
@@ -112,22 +113,38 @@ class TodayFragment : Fragment(), RecycleViewEventListener {
         })
     }
 
-    override fun onItemSwipeRight(position: Int) {
+    override fun onItemSwipeRight(position: Int, newPosition: Int?) {
         val item = adapter.dataProvider.getItem(position)
         Snackbar.make(binding.coordinatorLayout, R.string.task_is_done, Snackbar.LENGTH_LONG)
-                .setAction(R.string.undo, { onItemUndoTaskStatus() })
+                .setAction(R.string.undo, { onItemUndoTaskStatus(position, newPosition) })
                 .setActionTextColor(ContextCompat.getColor(activity, R.color.colorAccent))
                 .show()
 
         model.insertTask(item.task)
     }
 
-    private fun onItemUndoTaskStatus() {
-        val position = adapter.dataProvider.undoLastRemoval()
-        if (position >= 0) {
+    private fun onItemUndoTaskStatus(position: Int, newPosition: Int?) {
+        if (newPosition != null) {
+            adapter.dataProvider.undoLastMovement()
+            adapter.notifyItemMoved(newPosition, position)
+        } else {
+            adapter.dataProvider.undoLastRemoval()
             adapter.notifyItemInserted(position)
-            binding.recyclerView.scrollToPosition(position)
         }
+
+        val itemData = adapter.dataProvider.getItem(position)
+        val task = itemData.task
+        if (task.isComplete) {
+            task.isComplete = false
+            task.doneDate = null
+        } else {
+            task.isComplete = true
+            task.doneDate = DateUtils.currentTime()
+        }
+
+        model.insertTask(task)
+
+        adapter.notifyItemChanged(position)
     }
 
     override fun onItemSwipeLeft(position: Int) {
@@ -135,7 +152,7 @@ class TodayFragment : Fragment(), RecycleViewEventListener {
     }
 
     private fun showDateTimeDialog(position: Int) {
-        val item = adapter.dataProvider.getItem(position)
+        val item = adapter.dataProvider.getItem(position) as ConcreteData
         val task = item.task
         val dateTimePicker = DateTimePickerDialog(task.dueDate, task.allDay, onDateSelected = { date, allDay ->
             task.allDay = allDay
@@ -150,11 +167,23 @@ class TodayFragment : Fragment(), RecycleViewEventListener {
         dateTimePicker.show(fragmentManager, "DateTimePickerDialog")
     }
 
-    private fun unPinGroupItem(position: Int, item: AbstractDataProvider.Data) {
+    private fun unPinGroupItem(fromPosition: Int, item: ConcreteData) {
         item.isPinned = false
-        adapter.notifyItemChanged(position)
-    }
 
+        val newPosition = adapter.dataProvider.getValidPosition(item)
+        if (newPosition != null) {
+            if (fromPosition != newPosition) {
+                adapter.dataProvider.moveItem(fromPosition, newPosition)
+                adapter.notifyItemMoved(fromPosition, newPosition)
+                adapter.notifyItemChanged(newPosition)
+            } else {
+                adapter.notifyItemChanged(fromPosition)
+            }
+        } else {
+            adapter.dataProvider.removeItem(fromPosition)
+            adapter.notifyItemRemoved(fromPosition)
+        }
+    }
 
     override fun onItemClicked(v: View?, position: Int) {
         val item = adapter.dataProvider.getItem(position)

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
+        <import type="android.view.View"/>
+        <import type="android.support.v4.content.ContextCompat"/>
         <variable
             name="task"
             type="com.makeevapps.simpletodolist.datasource.db.table.Task"/>
@@ -20,23 +22,31 @@
             style="@style/TodayTaskItemContentStyle">
             <View
                 android:id="@+id/priorityView"
-                android:layout_width="10dp"
+                android:layout_width="6dp"
                 android:layout_height="match_parent"
-                android:background="@{task.priority.colorResId}"/>
+                android:background="@{ContextCompat.getColor(context, task.priority.colorResId)}"/>
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_weight="1"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/nameTextView"
-                    style="@style/TodayTaskItemTitleStyle"
-                    android:text="@{task.title}"/>
+                android:padding="10dp">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/nameTextView"
+                        style="@style/TodayTaskItemTitleStyle"
+                        android:text="@{task.title}"/>
+                    <TextView
+                        style="@style/TodayTaskItemDescriptionStyle"
+                        android:text="@{task.description}"
+                        android:visibility="@{task.description==null ? View.GONE : View.VISIBLE}"/>
+                </LinearLayout>
                 <TextView
                     android:id="@+id/dateTextView"
-                    style="@style/TodayTaskItemDateStyle"
-                    android:text="@{task.dueDate.toString()}"/>
+                    style="@style/TodayTaskItemDateStyle"/>
             </LinearLayout>
             <!--<TextView
                 android:id="@+id/subTaskCountTextView"
