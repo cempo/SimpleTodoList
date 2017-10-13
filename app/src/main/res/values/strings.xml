@@ -22,6 +22,12 @@
     <string name="calendar">Calendar</string>
     <string name="settings">Settings</string>
 
+    <!-- Menu header -->
+    <string name="day_format">%1$td</string>
+    <string name="month_format">%1$tB</string>
+    <string name="day_of_week_format">%1$tA</string>
+    <string name="year_format">%1$tY</string>
+
     <!-- Task list -->
     <string name="task_is_done">Done</string>
     <string name="sub_tasks_count">%d sub tasks</string>

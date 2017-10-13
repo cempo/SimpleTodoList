@@ -13,6 +13,7 @@ import com.makeevapps.simpletodolist.databinding.FragmentCalendarBinding
 import com.makeevapps.simpletodolist.ui.activity.MainActivity
 import com.makeevapps.simpletodolist.viewmodel.CalendarViewModel
 import kotlinx.android.synthetic.main.fragment_calendar.*
+import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.android.synthetic.main.toolbar.view.*
 
 class CalendarFragment : Fragment() {
@@ -42,7 +43,6 @@ class CalendarFragment : Fragment() {
 
         //TODO Add logic
         val activity = activity as MainActivity
-        activity.setTitle(R.string.calendar)
-        activity.setSupportActionBar(toolbar_include.toolbar)
+        activity.setToolbar(toolbar, true, true, getString(R.string.calendar))
     }
 }

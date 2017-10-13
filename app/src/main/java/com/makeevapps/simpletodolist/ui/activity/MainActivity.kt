@@ -9,16 +9,20 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
+import android.view.LayoutInflater
 import com.makeevapps.simpletodolist.R
 import com.makeevapps.simpletodolist.databinding.ActivityMainBinding
+import com.makeevapps.simpletodolist.databinding.ViewMenuHeaderBinding
 import com.makeevapps.simpletodolist.enums.MainMenuItemType
 import com.makeevapps.simpletodolist.enums.ThemeStyle
 import com.makeevapps.simpletodolist.ui.fragment.CalendarFragment
 import com.makeevapps.simpletodolist.ui.fragment.TodayFragment
+import com.makeevapps.simpletodolist.utils.DateUtils
 import com.makeevapps.simpletodolist.utils.UIUtils
 import com.makeevapps.simpletodolist.viewmodel.MainViewModel
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
+import com.mikepenz.materialdrawer.holder.DimenHolder
 import com.mikepenz.materialdrawer.holder.StringHolder
 import com.mikepenz.materialdrawer.model.DividerDrawerItem
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
@@ -47,8 +51,16 @@ class MainActivity : BaseActivity() {
         binding.controller = this
         binding.model = model
 
+        val headerBinding = DataBindingUtil.inflate<ViewMenuHeaderBinding>(LayoutInflater.from(this), R.layout
+                .view_menu_header, null, false)
+        headerBinding.controller = this
+        headerBinding.date = DateUtils.currentTime()
+
+
         drawer = DrawerBuilder()
                 .withActivity(this)
+                .withHeader(headerBinding.root)
+                .withHeaderHeight(DimenHolder.fromDp(200))
                 .withTranslucentStatusBar(false)
                 .withHasStableIds(true)
                 .withSavedInstance(savedInstanceState)
@@ -58,7 +70,7 @@ class MainActivity : BaseActivity() {
                         DividerDrawerItem(),
                         createMenuItemByType(MainMenuItemType.SETTINGS)
                 )
-                //.withSelectedItem(1)
+                .withSelectedItem(1)
                 .withOnDrawerItemClickListener { view, position, drawerItem ->
                     if (drawerItem != null) {
                         val menuItem = MainMenuItemType.getItemById(drawerItem.identifier)
@@ -68,14 +80,20 @@ class MainActivity : BaseActivity() {
                 }
                 .build()
 
-        selectMenuItem(MainMenuItemType.TODAY)
+        if (savedInstanceState == null) {
+            selectMenuItem(MainMenuItemType.TODAY)
+        }
 
         observeTaskData()
     }
 
     private fun createMenuItemByType(type: MainMenuItemType): PrimaryDrawerItem {
-        return PrimaryDrawerItem().withIdentifier(type.id).withName(type.textResId).withIcon(type.imageResId)
+        return PrimaryDrawerItem()
+                .withIdentifier(type.id)
+                .withName(type.textResId)
+                .withIcon(type.imageResId)
                 .withSelectable(true)
+                .withIconTintingEnabled(true)
     }
 
     private fun observeTaskData() {
@@ -109,8 +127,13 @@ class MainActivity : BaseActivity() {
 
     fun setToolbar(toolbar: Toolbar, homeAsUp: Boolean, homeEnabled: Boolean, title: String?) {
         setSupportActionBar(toolbar, homeAsUp, homeEnabled, title)
-        drawer.setToolbar(this, toolbar)
-        drawer.drawerLayout.setStatusBarBackgroundColor(ContextCompat.getColor(this, R.color.status_bar))
+        drawer.setToolbar(this, toolbar, true)
+       //drawer.drawerLayout.setStatusBarBackgroundColor(ContextCompat.getColor(this, R.color.status_bar))
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        var outState = drawer.saveInstanceState(outState)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onBackPressed() {
