@@ -1,87 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
+        <import type="com.makeevapps.simpletodolist.enums.TaskPriority"/>
+        <import type="android.view.View"/>
+        <import type="android.content.Context"/>
         <variable
             name="controller"
             type="com.makeevapps.simpletodolist.ui.activity.EditTaskActivity"/>
         <variable
             name="model"
             type="com.makeevapps.simpletodolist.viewmodel.EditTaskViewModel"/>
+        <variable
+            name="task"
+            type="com.makeevapps.simpletodolist.datasource.db.table.Task"/>
     </data>
-    <LinearLayout
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-        <include
-            android:id="@+id/toolbar_include"
-            layout="@layout/toolbar"/>
-        <EditText
-            android:id="@+id/taskTitleTextView"
+        android:focusableInTouchMode="true">
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/task_name"
-            android:textSize="24sp"
-            android:onTextChanged="@{(text, start, before, count) -> controller.onTitleTextChanged(text)}"/>
-        <EditText
-            android:id="@+id/taskDescriptionTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/task_description"
-            android:onTextChanged="@{(text, start, before, count) -> controller.onDescriptionTextChanged(text)}"/>
-        <TextView
-            android:id="@+id/dateTimeTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Date/time"
-            android:padding="10dp"
-            android:onClick="@{controller.onDateTimeButtonClick}"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            android:gravity="center_vertical"
-            android:onClick="@{controller.changeTaskPriority}">
-            <TextView
-                android:layout_width="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/homeCollapseToolbar"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/priority"/>
-            <TextView
-                android:id="@+id/priorityNameTextView"
-                android:layout_width="wrap_content"
+                app:contentScrim="?attr/colorPrimary"
+                app:layout_scrollFlags="enterAlways"
+                app:titleEnabled="false">
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    style="@style/ToolbarStyle"
+                    app:layout_collapseMode="pin"/>
+                <android.support.v7.widget.AppCompatEditText
+                    style="@style/TaskTitleEditTextStyle"
+                    android:text="@{task.title}"
+                    android:onTextChanged="@{(text, start, before, count) -> controller.onTitleTextChanged(text)}"/>
+            </android.support.design.widget.CollapsingToolbarLayout>
+        </android.support.design.widget.AppBarLayout>
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"/>
-            <View
-                android:id="@+id/priorityColorView"
-                android:layout_width="30dp"
-                android:layout_height="30dp"/>
-        </LinearLayout>
-        <!--<CheckBox
-            android:id="@+id/allDayCheckBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/all_day"
-            android:onCheckedChanged="@{(v, checked) -> controller.onAllDayCheckedChanged(checked)}"/>
--->
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/subTasksRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:src="@drawable/ic_add_black_24dp"
-            android:onClick="@{controller.addSubTaskButtonClick}"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:padding="20dp"
-            android:gravity="center"
-            android:text="Delete task"
-            android:onClick="@{controller::deleteTask}"/>
-    </LinearLayout>
+                android:orientation="vertical">
+                <LinearLayout style="@style/DetailItemLayoutStyle">
+                    <ImageView
+                        style="@style/DetailItemIconStyle"
+                        android:src="@drawable/ic_date_range_black_24dp"/>
+                    <TextView
+                        android:id="@+id/dateTimeTextView"
+                        style="@style/DetailItemTextStyle"
+                        android:text="@string/select_date"
+                        android:onClick="@{controller.onDateTimeButtonClick}"/>
+                </LinearLayout>
+                <LinearLayout
+                    style="@style/DetailItemLayoutStyle"
+                    android:onClick="@{controller.changeTaskPriority}">
+                    <ImageView
+                        style="@style/DetailItemIconStyle"
+                        android:src="@drawable/ic_priority_high_black_24dp"/>
+                    <TextView
+                        style="@style/DetailItemTextStyle"
+                        android:text="@string/select_priority"
+                        android:visibility="@{task.priority == TaskPriority.NONE ? View.VISIBLE : View.GONE}"/>
+                    <TextView
+                        android:id="@+id/priorityNameTextView"
+                        style="@style/DetailItemTextStyle"
+                        android:visibility="@{task.priority == TaskPriority.NONE ? View.GONE : View.VISIBLE}"/>
+                    <View
+                        android:id="@+id/priorityColorView"
+                        android:layout_marginStart="10dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:visibility="@{task.priority == TaskPriority.NONE ? View.GONE : View.VISIBLE}"/>
+                </LinearLayout>
+                <!--<CheckBox
+                    android:id="@+id/allDayCheckBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/all_day"
+                    android:onCheckedChanged="@{(v, checked) -> controller.onAllDayCheckedChanged(checked)}"/>-->
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/subTasksRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <LinearLayout
+                    style="@style/DetailItemLayoutStyle"
+                    android:onClick="@{controller.addSubTaskButtonClick}">
+                    <ImageView
+                        style="@style/DetailItemIconStyle"
+                        android:src="@drawable/ic_add_black_24dp"/>
+                    <TextView
+                        style="@style/DetailItemTextStyle"
+                        android:text="@string/add_sub_task"/>
+                </LinearLayout>
+                <LinearLayout style="@style/DetailItemLayoutStyle">
+                    <ImageView
+                        style="@style/DetailItemIconStyle"
+                        android:src="@drawable/ic_description_black_24dp"/>
+                    <EditText
+                        style="@style/DetailItemTextStyle"
+                        android:hint="@string/task_description"
+                        android:text="@{task.description}"
+                        android:onTextChanged="@{(text, start, before, count) -> controller.onDescriptionTextChanged(text)}"/>
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+        <android.support.design.widget.FloatingActionButton
+            style="@style/FabButtonNormal"
+            android:src="@drawable/ic_done_24dp"
+            android:layout_gravity="bottom|end"
+            android:onClick="@{controller.saveTask}"/>
+    </android.support.design.widget.CoordinatorLayout>
 </layout>

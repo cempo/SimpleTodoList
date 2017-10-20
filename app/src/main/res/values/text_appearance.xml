@@ -9,6 +9,8 @@
 
     <style name="TextAppearance.ListItem.TodayTasks"/>
 
+    <style name="TextAppearance.TaskDetails"/>
+
     <style name="TextAppearance.Dialog.Button" parent="Base.TextAppearance.AppCompat.Button">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">?android:colorAccent</item>
@@ -25,11 +27,13 @@
         <item name="android:textColor">?android:textColorPrimaryInverse</item>
         <item name="android:textStyle">normal</item>
     </style>
+
     <style name="TextAppearance.MenuHeader.Month">
         <item name="android:textSize">@dimen/text_size_18sp</item>
         <item name="android:textColor">?attr/colorPrimaryLight</item>
         <item name="android:textStyle">normal</item>
     </style>
+
     <style name="TextAppearance.MenuHeader.Year">
         <item name="android:textSize">@dimen/text_size_18sp</item>
         <item name="android:textColor">?attr/colorPrimaryLight</item>
@@ -50,5 +54,15 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/text_size_18sp</item>
         <item name="android:textColor">?android:textColorSecondary</item>
+    </style>
+
+    <!-- Task Details -->
+    <style name="TextAppearance.TaskDetails.Title">
+        <item name="android:textSize">@dimen/text_size_26sp</item>
+        <item name="android:textColor">?android:textColorPrimaryInverse</item>
+    </style>
+    <style name="TextAppearance.TaskDetails.Description">
+        <item name="android:textSize">@dimen/text_size_14sp</item>
+        <item name="android:textColor">?android:textColorPrimaryInverse</item>
     </style>
 </resources>

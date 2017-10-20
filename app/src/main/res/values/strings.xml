@@ -38,13 +38,16 @@
     <string name="task_name">Task name</string>
     <string name="task_description">Task description</string>
     <string name="save">Save</string>
+    <string name="delete">Delete</string>
     <string name="time">Time</string>
     <string name="clear">Clear</string>
     <string name="time_not_setup">Time not setup</string>
     <string name="error_title_empty">Title can\'t be empty</string>
     <string name="cancel_your_changes">Cancel your changes?</string>
-    <string name="change_sub_task">Change</string>
-    <string name="add_sub_task">Add</string>
+    <string name="change_sub_task">Change Sub task</string>
+    <string name="select_date">Select date</string>
+    <string name="select_priority">Select priority</string>
+    <string name="add_sub_task">Add Sub task</string>
     <string name="all_day">All day</string>
     <string name="date_in_the_past">You can\'t use time in the past</string>
 </resources>

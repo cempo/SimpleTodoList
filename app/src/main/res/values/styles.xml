@@ -1,20 +1,44 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <!-- Base application theme. -->
+    <style name="BaseAppTheme" parent="Theme.AppCompat.Light">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <!--<item name="android:windowTranslucentStatus">true</item>-->
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowAnimationStyle">@style/ActivityAnimation</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <!--<item name="android:buttonStyle">@style/ButtonStyle</item>
+        <item name="buttonStyle">@style/ButtonStyle</item>
+        <item name="android:imageButtonStyle">@style/ButtonStyle</item>
+        <item name="imageButtonStyle">@style/ButtonStyle</item>-->
+        <!--<item name="android:spinnerItemStyle">@style/SpinnerItemStyle</item>-->
+        <!-- Custom -->
+    </style>
+
+    <style name="ActivityAnimation" parent="@android:style/Animation.Translucent">
+        <item name="android:windowEnterAnimation">@anim/fade_in</item>
+        <item name="android:windowExitAnimation">@anim/fade_out</item>
+    </style>
+
+    <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+        <item name="color">?attr/toolbarIconColor</item>
+    </style>
+
+    <style name="AppTheme1" parent="BaseAppTheme">
         <item name="colorPrimary">#42a5f5</item>
         <item name="colorPrimaryDark">#0077c2</item>
         <item name="colorPrimaryLight">#80d6ff</item>
-        <item name="android:colorAccent">#66bb6a</item>
+        <item name="colorAccent">#66bb6a</item>
         <item name="android:textColorPrimary">#212121</item>
         <item name="android:textColorSecondary">#757575</item>
         <item name="android:textColorPrimaryInverse">#e1e7ef</item>
         <item name="android:textColorSecondaryInverse">#9E9E9E</item>
         <item name="android:divider">#BDBDBD</item>
-        <item name="drawerArrowStyle">@style/MaterialDrawer.DrawerArrowStyle</item>
-        <!--<item name="android:windowTranslucentStatus">true</item>-->
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">#0077c2</item>
         <item name="android:navigationBarColor">#42a5f5</item>
         <!-- Drawer -->
@@ -27,22 +51,24 @@
         <!-- Custom -->
         <item name="toolbarIconColor">#ffffff</item>
         <item name="toolbarTitleColor">#ffffff</item>
+        <item name="toolbarEditTextLineColor">#ffffff</item>
         <item name="iconColor">#ffffff</item>
         <item name="iconColorInverse">#212121</item>
     </style>
 
-    <style name="AppThemeDark" parent="AppTheme">
+    <style name="AppTheme2" parent="AppTheme1">
         <item name="colorPrimary">#ef5350</item>
-        <!--<item name="colorPrimaryLight">#ff867c</item>-->
         <item name="colorPrimaryDark">#b61827</item>
         <item name="colorAccent">#ffc107</item>
     </style>
+
+
     <!-- Toolbar -->
     <style name="ToolbarStyle" parent="Widget.AppCompat.Toolbar">
-        <item name="android:minHeight">?attr/actionBarSize</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
         <item name="theme">@style/ToolbarTheme</item>
-        <item name="android:background">?colorPrimary</item>
     </style>
 
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -120,5 +146,45 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_margin">5dp</item>
         <item name="android:gravity">center</item>
+    </style>
+
+    <!-- Task Details -->
+    <style name="TaskTitleEditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:textAppearance">@style/TextAppearance.TaskDetails.Title</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">50dp</item>
+        <item name="android:layout_marginEnd">50dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:hint">@string/task_name</item>
+        <item name="android:backgroundTint">?toolbarEditTextLineColor</item>
+        <item name="android:textCursorDrawable">@null</item>
+    </style>
+    <style name="TaskDescriptionEditTextStyle">
+        <item name="android:textAppearance">@style/TextAppearance.TaskDetails.Title</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">50dp</item>
+        <item name="android:layout_marginEnd">50dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:hint">@string/task_name</item>
+    </style>
+    <style name="DetailItemLayoutStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:padding">10dp</item>
+    </style>
+    <style name="DetailItemIconStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">10dp</item>
+        <item name="android:tint">?android:textColorSecondary</item>
+    </style>
+    <style name="DetailItemTextStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:tint">?android:textColorSecondary</item>
     </style>
 </resources>

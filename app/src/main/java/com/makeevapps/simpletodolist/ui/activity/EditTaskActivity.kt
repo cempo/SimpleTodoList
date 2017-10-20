@@ -34,17 +34,16 @@ class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener {
     lateinit var todayTaskAdapter: SubTaskAdapter
 
     companion object {
-        fun getActivityIntent(context: Context, taskId: String? = null, parentId: String? = null): Intent {
+        fun getActivityIntent(context: Context, taskId: String? = null): Intent {
             val intent = Intent(context, EditTaskActivity::class.java)
             intent.putExtra("taskId", taskId)
-            intent.putExtra("parentId", parentId)
             return intent
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         model = ViewModelProviders.of(this).get(EditTaskViewModel::class.java)
-        setTheme(ThemeStyle.getThemeById(model.preferenceManager.getThemeId()).themeResId)
+        setTheme(model.getThemeResId())
         super.onCreate(savedInstanceState)
 
         model.loadTask(intent.extras.getString("taskId"))
@@ -53,12 +52,14 @@ class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener {
         binding.controller = this
         binding.model = model
 
-        setSupportActionBar(toolbar, true, true, getString(R.string.new_task))
+        setSupportActionBar(toolbar, true, true, null)
 
         todayTaskAdapter = SubTaskAdapter(this)
 
+        binding.scrollView.isNestedScrollingEnabled = false
         binding.subTasksRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.subTasksRecyclerView.adapter = todayTaskAdapter
+        binding.subTasksRecyclerView.isNestedScrollingEnabled = false
 
         observeTaskResponse()
         observeSubTaskResponse()
@@ -67,8 +68,7 @@ class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener {
     private fun observeTaskResponse() {
         model.getTaskResponse().observe(this, Observer<Task> { task ->
             if (task != null) {
-                binding.taskTitleTextView.setText(task.title)
-                binding.taskDescriptionTextView.setText(task.description)
+                binding.task = task
                 binding.dateTimeTextView.text = task.dueDate?.asString(DateUtils.DATE_TIME_FORMAT)
                 binding.priorityNameTextView.setText(task.priority.textResId)
                 binding.priorityColorView.setBackgroundResource(task.priority.colorResId)
@@ -138,12 +138,7 @@ class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener {
         })
     }
 
-    private fun saveTask() {
-        val parentId = intent.extras.getString("parentId")
-        if (!parentId.isNullOrEmpty()) {
-            model.newTask.parentId = parentId
-        }
-
+    fun saveTask(view: View?) {
         model.insertOrUpdateTask(onSuccess = {
             finish()
         }, onError = { message ->
@@ -155,10 +150,6 @@ class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener {
         showAddSubTaskDialog(null)
     }
 
-    fun deleteTask(view: View?) {
-        model.deleteTask(onSuccess = { finish() })
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_create_task, menu)
         return true
@@ -167,7 +158,7 @@ class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> finish()
-            R.id.save -> saveTask()
+            R.id.delete -> model.deleteTask(onSuccess = { finish() })
         }
         return super.onOptionsItemSelected(item)
     }

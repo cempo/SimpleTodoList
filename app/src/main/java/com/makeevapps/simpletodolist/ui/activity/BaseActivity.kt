@@ -22,8 +22,6 @@ open class BaseActivity : AppCompatActivity() {
     }*/
 
     fun setSupportActionBar(toolbar: Toolbar, homeAsUp: Boolean, homeEnabled: Boolean, title: String?) {
-
-        //toolbar.title = title
         setSupportActionBar(toolbar)
 
         val actionBar = supportActionBar

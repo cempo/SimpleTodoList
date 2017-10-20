@@ -6,6 +6,7 @@ import com.makeevapps.simpletodolist.App
 import com.makeevapps.simpletodolist.R
 import com.makeevapps.simpletodolist.datasource.db.table.Task
 import com.makeevapps.simpletodolist.datasource.preferences.PreferenceManager
+import com.makeevapps.simpletodolist.enums.ThemeStyle
 import com.makeevapps.simpletodolist.repository.TaskRepository
 import com.orhanobut.logger.Logger
 import io.reactivex.disposables.CompositeDisposable
@@ -28,6 +29,8 @@ class EditTaskViewModel : ViewModel() {
     init {
         App.component.inject(this)
     }
+
+    fun getThemeResId(): Int = ThemeStyle.getThemeById(preferenceManager.getThemeId()).themeResId
 
     fun loadTask(taskId: String?) {
         if (taskId != null && !taskId.isEmpty()) {
@@ -69,6 +72,7 @@ class EditTaskViewModel : ViewModel() {
     fun insertSubTask(subTask: Task) {
         compositeDisposable.add(taskRepository.insertOrUpdateTask(subTask).subscribe())
     }
+
     fun deleteTask(onSuccess: () -> Unit) {
         compositeDisposable.add(taskRepository.deleteTask(newTask).subscribe({ onSuccess() }))
     }
