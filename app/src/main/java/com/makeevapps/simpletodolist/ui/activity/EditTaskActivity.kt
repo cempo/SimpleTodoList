@@ -13,7 +13,7 @@ import android.view.View
 import com.makeevapps.simpletodolist.R
 import com.makeevapps.simpletodolist.databinding.ActivityEditTaskBinding
 import com.makeevapps.simpletodolist.datasource.db.table.Task
-import com.makeevapps.simpletodolist.enums.ThemeStyle
+import com.makeevapps.simpletodolist.interfaces.CheckBoxCheckedListener
 import com.makeevapps.simpletodolist.interfaces.RecycleViewItemClickListener
 import com.makeevapps.simpletodolist.ui.adapter.SubTaskAdapter
 import com.makeevapps.simpletodolist.ui.dialog.CancelChangesDialog
@@ -28,10 +28,10 @@ import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.toolbar.*
 
 
-class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener {
+class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener, CheckBoxCheckedListener {
     lateinit var model: EditTaskViewModel
     lateinit var binding: ActivityEditTaskBinding
-    lateinit var todayTaskAdapter: SubTaskAdapter
+    lateinit var subTaskAdapter: SubTaskAdapter
 
     companion object {
         fun getActivityIntent(context: Context, taskId: String? = null): Intent {
@@ -54,11 +54,11 @@ class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener {
 
         setSupportActionBar(toolbar, true, true, null)
 
-        todayTaskAdapter = SubTaskAdapter(this)
+        subTaskAdapter = SubTaskAdapter(this, this)
 
         binding.scrollView.isNestedScrollingEnabled = false
         binding.subTasksRecyclerView.layoutManager = LinearLayoutManager(this)
-        binding.subTasksRecyclerView.adapter = todayTaskAdapter
+        binding.subTasksRecyclerView.adapter = subTaskAdapter
         binding.subTasksRecyclerView.isNestedScrollingEnabled = false
 
         observeTaskResponse()
@@ -69,9 +69,6 @@ class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener {
         model.getTaskResponse().observe(this, Observer<Task> { task ->
             if (task != null) {
                 binding.task = task
-                binding.dateTimeTextView.text = task.dueDate?.asString(DateUtils.DATE_TIME_FORMAT)
-                binding.priorityNameTextView.setText(task.priority.textResId)
-                binding.priorityColorView.setBackgroundResource(task.priority.colorResId)
                 Logger.e("Refresh task")
             }
         })
@@ -79,7 +76,7 @@ class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener {
 
     private fun observeSubTaskResponse() {
         model.getSubTaskResponse().observe(this, Observer<List<Task>> { tasks ->
-            todayTaskAdapter.clearAndAdd(tasks)
+            subTaskAdapter.clearAndAdd(tasks)
             Logger.e("Refresh sub task")
         })
     }
@@ -106,12 +103,7 @@ class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener {
             model.newTask.allDay = allDay
             model.newTask.dueDate = date
 
-            if (allDay) {
-                binding.dateTimeTextView.text = date?.asString(DateUtils.SHORT_DATE_FORMAT3) ?: "No date"
-            } else {
-                binding.dateTimeTextView.text = date?.asString(DateUtils.DATE_TIME_FORMAT) ?: "No date"
-            }
-
+            binding.task = model.newTask
         }, onCanceled = {
 
         })
@@ -121,21 +113,41 @@ class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener {
     fun changeTaskPriority(view: View?) {
         EditTaskPriorityDialog.showDialog(this, model.newTask.priority, onSuccess = { priority ->
             model.newTask.priority = priority
-            binding.priorityNameTextView.setText(priority.textResId)
-            binding.priorityColorView.setBackgroundResource(priority.colorResId)
+            binding.task = model.newTask
         })
     }
 
     override fun onItemClick(view: View, position: Int) {
-        val task = todayTaskAdapter.getItem(position)
+        val task = subTaskAdapter.getItem(position)
         showAddSubTaskDialog(task)
+    }
+
+    override fun onCheckBoxChecked(view: View, position: Int, isChecked: Boolean) {
+        ToastUtils.showSimpleToast(this, "Position: $position")
+
+        val task = subTaskAdapter.getItem(position)
+        model.insertOrUpdateSubTask(task)
     }
 
     private fun showAddSubTaskDialog(existSubTask: Task?) {
         EditSubTaskDialog.showDialog(this, existSubTask, onSuccess = { subTask ->
             subTask.parentId = model.newTask.id
-            model.insertSubTask(subTask)
+            model.insertOrUpdateSubTask(subTask)
+        }, onDelete = {
+            model.deleteSubTask(existSubTask)
         })
+    }
+
+    fun getDueDate(task: Task?): String {
+        return if (task != null && task.isPlaned()) {
+            if (task.allDay) {
+                task.dueDate!!.asString(DateUtils.SHORT_DATE_FORMAT3)
+            } else {
+                task.dueDate!!.asString(DateUtils.DATE_TIME_FORMAT)
+            }
+        } else {
+            getString(R.string.select_date)
+        }
     }
 
     fun saveTask(view: View?) {
@@ -172,6 +184,4 @@ class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener {
             super.onBackPressed()
         }
     }
-
-
 }

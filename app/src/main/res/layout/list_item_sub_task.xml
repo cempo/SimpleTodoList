@@ -7,10 +7,14 @@
     </data>
     <LinearLayout
         android:id="@+id/itemLayout"
-        style="@style/TodayTaskItemStyle">
+        style="@style/DetailSubTaskItemStyle">
+        <CheckBox
+            android:id="@+id/checkBox"
+            style="@style/DetailSubTaskCheckBoxStyle"
+            android:checked="@{task.complete}"/>
         <TextView
             android:id="@+id/title"
-            style="@style/TodayTaskItemTitleStyle"
+            style="@style/DetailSubTaskItemTitleStyle"
             android:text="@{task.title}"/>
     </LinearLayout>
 </layout>

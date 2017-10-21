@@ -4,7 +4,7 @@
     <data>
         <import type="com.makeevapps.simpletodolist.enums.TaskPriority"/>
         <import type="android.view.View"/>
-        <import type="android.content.Context"/>
+        <import type="android.support.v4.content.ContextCompat"/>
         <variable
             name="controller"
             type="com.makeevapps.simpletodolist.ui.activity.EditTaskActivity"/>
@@ -58,9 +58,10 @@
                     <TextView
                         android:id="@+id/dateTimeTextView"
                         style="@style/DetailItemTextStyle"
-                        android:text="@string/select_date"
+                        android:text="@{controller.getDueDate(task)}"
                         android:onClick="@{controller.onDateTimeButtonClick}"/>
                 </LinearLayout>
+                <View style="@style/TaskDetailDividerStyle"/>
                 <LinearLayout
                     style="@style/DetailItemLayoutStyle"
                     android:onClick="@{controller.changeTaskPriority}">
@@ -70,24 +71,21 @@
                     <TextView
                         style="@style/DetailItemTextStyle"
                         android:text="@string/select_priority"
-                        android:visibility="@{task.priority == TaskPriority.NONE ? View.VISIBLE : View.GONE}"/>
+                        android:visibility="@{task == null || task.priority == TaskPriority.NONE ? View.VISIBLE : View.GONE}"/>
                     <TextView
                         android:id="@+id/priorityNameTextView"
                         style="@style/DetailItemTextStyle"
-                        android:visibility="@{task.priority == TaskPriority.NONE ? View.GONE : View.VISIBLE}"/>
+                        android:text="@{task != null ? task.priority.textResId : TaskPriority.NONE.textResId}"
+                        android:visibility="@{task == null || task.priority == TaskPriority.NONE ? View.GONE : View.VISIBLE}"/>
                     <View
                         android:id="@+id/priorityColorView"
                         android:layout_marginStart="10dp"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:visibility="@{task.priority == TaskPriority.NONE ? View.GONE : View.VISIBLE}"/>
+                        android:background="@{task != null ? ContextCompat.getColor(context, task.priority.colorResId) : ContextCompat.getColor(context, TaskPriority.NONE.colorResId)}"
+                        android:visibility="@{task == null || task.priority == TaskPriority.NONE ? View.GONE : View.VISIBLE}"/>
                 </LinearLayout>
-                <!--<CheckBox
-                    android:id="@+id/allDayCheckBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/all_day"
-                    android:onCheckedChanged="@{(v, checked) -> controller.onAllDayCheckedChanged(checked)}"/>-->
+                <View style="@style/TaskDetailDividerStyle"/>
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/subTasksRecyclerView"
                     android:layout_width="match_parent"
@@ -102,6 +100,7 @@
                         style="@style/DetailItemTextStyle"
                         android:text="@string/add_sub_task"/>
                 </LinearLayout>
+                <View style="@style/TaskDetailDividerStyle"/>
                 <LinearLayout style="@style/DetailItemLayoutStyle">
                     <ImageView
                         style="@style/DetailItemIconStyle"
@@ -110,6 +109,7 @@
                         style="@style/DetailItemTextStyle"
                         android:hint="@string/task_description"
                         android:text="@{task.description}"
+                        android:layout_marginEnd="60dp"
                         android:onTextChanged="@{(text, start, before, count) -> controller.onDescriptionTextChanged(text)}"/>
                 </LinearLayout>
             </LinearLayout>

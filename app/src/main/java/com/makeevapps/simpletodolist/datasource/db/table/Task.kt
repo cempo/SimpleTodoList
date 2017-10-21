@@ -75,6 +75,8 @@ class Task() {
 
     fun isNotPlaned() = dueDate == null
 
+    fun isPlaned() = dueDate != null
+
     fun isPlanedForToday(): Boolean = isPlanedForDay(DateUtils.currentTime())
 
     fun isPlanedForDay(date: Date): Boolean = dueDate != null && dueDate!! <= DateUtils.endDayDate(date)

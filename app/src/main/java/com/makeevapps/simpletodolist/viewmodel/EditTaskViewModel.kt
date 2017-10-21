@@ -69,12 +69,20 @@ class EditTaskViewModel : ViewModel() {
         }
     }
 
-    fun insertSubTask(subTask: Task) {
-        compositeDisposable.add(taskRepository.insertOrUpdateTask(subTask).subscribe())
-    }
-
     fun deleteTask(onSuccess: () -> Unit) {
         compositeDisposable.add(taskRepository.deleteTask(newTask).subscribe({ onSuccess() }))
+    }
+
+    fun insertOrUpdateSubTask(subTask: Task?) {
+        if (subTask != null) {
+            compositeDisposable.add(taskRepository.insertOrUpdateTask(subTask).subscribe())
+        }
+    }
+
+    fun deleteSubTask(subTask: Task?) {
+        if (subTask != null) {
+            compositeDisposable.add(taskRepository.deleteTask(subTask).subscribe())
+        }
     }
 
     fun getTaskResponse(): MutableLiveData<Task> = taskResponse

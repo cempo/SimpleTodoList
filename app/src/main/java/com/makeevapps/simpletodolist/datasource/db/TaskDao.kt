@@ -22,7 +22,7 @@ interface TaskDao {
     @Query("SELECT * FROM task WHERE id = :taskId LIMIT 1")
     fun loadByIdOnce(taskId: String): Maybe<Task>
 
-    @Query("SELECT * FROM task WHERE parentId = :taskId")
+    @Query("SELECT * FROM task WHERE parentId = :taskId ORDER BY title ASC")
     fun loadSubTasksById(taskId: String): Flowable<List<Task>>
 
     @Query("SELECT * FROM task WHERE dueDateTimestamp = null")

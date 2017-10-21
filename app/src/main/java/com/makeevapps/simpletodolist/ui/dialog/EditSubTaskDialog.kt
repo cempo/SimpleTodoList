@@ -16,12 +16,12 @@ object EditSubTaskDialog {
     private var mHandler: Handler? = null
 
     @Synchronized
-    fun showDialog(context: Context, subTask: Task?, onSuccess: (task: Task) -> Unit) {
+    fun showDialog(context: Context, subTask: Task?, onSuccess: (task: Task) -> Unit, onDelete: () -> Unit) {
         dismissDialog()
 
         val builder = MaterialDialog.Builder(context)
                 .title(if (subTask != null) R.string.change_sub_task else R.string.add_sub_task)
-                .inputRangeRes(2, 20, R.color.colorAccent)
+                .inputRangeRes(2, 60, R.color.colorAccent)
                 .input(null, subTask?.title ?: "", { dialog, input ->
                     if (subTask != null) {
                         subTask.title = input.toString()
@@ -31,15 +31,8 @@ object EditSubTaskDialog {
                     }
                 })
 
-        /*val builder = MaterialDialog.Builder(context)
-        builder.content(R.string.cancel_your_changes)
-
-        builder.positiveText(R.string.yes)
-        builder.onPositive({ dialog, which ->
-            onSuccess()
-        })
-
-        builder.negativeText(R.string.no)*/
+        builder.negativeText(R.string.delete)
+        builder.onNegative { dialog, which -> onDelete() }
 
         if (mHandler == null)
             mHandler = Handler(Looper.getMainLooper())

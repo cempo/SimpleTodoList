@@ -7,9 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.makeevapps.simpletodolist.databinding.ListItemSubTaskBinding
 import com.makeevapps.simpletodolist.datasource.db.table.Task
+import com.makeevapps.simpletodolist.interfaces.CheckBoxCheckedListener
 import com.makeevapps.simpletodolist.interfaces.RecycleViewItemClickListener
 
-class SubTaskAdapter(private val itemClickListener: RecycleViewItemClickListener) : RecyclerView.Adapter<SubTaskAdapter.ViewHolder>() {
+class SubTaskAdapter(private val itemClickListener: RecycleViewItemClickListener,
+                     private val checkBoxListener: CheckBoxCheckedListener) : RecyclerView.Adapter<SubTaskAdapter.ViewHolder>() {
     private var items: ArrayList<Task> = ArrayList()
 
     init {
@@ -26,10 +28,18 @@ class SubTaskAdapter(private val itemClickListener: RecycleViewItemClickListener
         val task = items[position]
 
         holder.binding.task = task
+        holder.binding.checkBox.setOnClickListener { view ->
+            task.isComplete = !task.isComplete
+            checkBoxListener.onCheckBoxChecked(view, position, task.isComplete)
+        }
     }
 
     inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
         val binding: ListItemSubTaskBinding = DataBindingUtil.bind(view)
+
+        init {
+            binding.itemLayout.setOnClickListener(this)
+        }
 
         override fun onClick(view: View?) {
             if (view != null) {

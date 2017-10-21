@@ -20,7 +20,7 @@ class DateTimePickerDialog() : DatePickerDialog(), DatePickerDialog.OnDateSetLis
     var currentDate: Date? = null
     lateinit var newDateCalendar: Calendar
     lateinit var binding: ViewDatePickerTimeButtonBinding
-    lateinit var onDateSelected: (date: Date?, allDay: Boolean) -> Unit
+    lateinit var onDateSelected: (date: Date, allDay: Boolean) -> Unit
     lateinit var onCanceled: () -> Unit
     var allDay: Boolean = false
 
@@ -28,7 +28,7 @@ class DateTimePickerDialog() : DatePickerDialog(), DatePickerDialog.OnDateSetLis
         setOnDateSetListener(this)
     }
 
-    constructor(oldDate: Date?, allDay: Boolean, onDateSelected: (date: Date?, allDay: Boolean) -> Unit,
+    constructor(oldDate: Date?, allDay: Boolean, onDateSelected: (date: Date, allDay: Boolean) -> Unit,
                 onCanceled: () -> Unit) : this() {
         this.currentDate = oldDate
         this.allDay = allDay
