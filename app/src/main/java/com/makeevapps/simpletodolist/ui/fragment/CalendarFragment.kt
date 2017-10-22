@@ -109,7 +109,6 @@ class CalendarFragment : Fragment(), RecycleViewEventListener {
 
         val animator = SwipeDismissItemAnimator()
         animator.supportsChangeAnimations = false
-        animator.changeDuration = 0
 
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = wrappedAdapter
@@ -126,8 +125,8 @@ class CalendarFragment : Fragment(), RecycleViewEventListener {
             if (tasks != null && tasks.isNotEmpty()) {
                 Logger.e("Refresh task list. Size: " + tasks.size)
 
-                releaseRecyclerView()
-                prepareRecyclerView()
+                /*releaseRecyclerView()
+                prepareRecyclerView()*/
 
                 adapter.setData(TaskDataProvider(tasks))
             } else {

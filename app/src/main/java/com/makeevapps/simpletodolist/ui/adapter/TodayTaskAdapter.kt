@@ -224,10 +224,8 @@ class TodayTaskAdapter(val context: Context,
 
             if (toPosition != null) {
                 adapter!!.dataProvider.moveItem(position, toPosition)
-                //adapter!!.notifyItemMoved(position, toPosition)
             } else {
                 adapter!!.dataProvider.removeItem(position)
-               // adapter!!.notifyItemRemoved(position)
             }
         }
 
@@ -246,10 +244,8 @@ class TodayTaskAdapter(val context: Context,
     fun onUndoTaskStatus(position: Int, newPosition: Int?, onSuccess: (task: Task) -> Unit) {
         if (newPosition != null) {
             dataProvider.undoLastMovement()
-            //notifyItemMoved(newPosition, position)
         } else {
             dataProvider.undoLastRemoval()
-            //notifyItemInserted(position)
         }
 
         val itemData = dataProvider.getItem(position)
@@ -262,7 +258,6 @@ class TodayTaskAdapter(val context: Context,
             task.doneDate = DateUtils.currentTime()
         }
 
-        //notifyItemChanged(position)
 
         onSuccess(task)
     }
@@ -274,14 +269,9 @@ class TodayTaskAdapter(val context: Context,
         if (newPosition != null) {
             if (fromPosition != newPosition) {
                 dataProvider.moveItem(fromPosition, newPosition)
-                //notifyItemMoved(fromPosition, newPosition)
-                //notifyItemChanged(newPosition)
-            } else {
-               // notifyItemChanged(fromPosition)
             }
         } else {
             dataProvider.removeItem(fromPosition)
-            //notifyItemRemoved(fromPosition)
         }
     }
 }

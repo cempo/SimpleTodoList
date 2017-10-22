@@ -63,11 +63,11 @@ class TodayFragment : Fragment(), RecycleViewEventListener {
         val activity = activity as MainActivity
         activity.setToolbar(toolbar, true, true, getString(R.string.today))
 
-        prepareRecyclerView(savedInstanceState)
+        prepareRecyclerView()
         observeTasksResponse()
     }
 
-    private fun prepareRecyclerView(savedInstanceState: Bundle?) {
+    private fun prepareRecyclerView() {
         //Create managers
         swipeManager = RecyclerViewSwipeManager()
         touchActionGuardManager = RecyclerViewTouchActionGuardManager()
