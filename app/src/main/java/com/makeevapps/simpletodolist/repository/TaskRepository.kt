@@ -9,33 +9,18 @@ import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import java.util.*
 
 class TaskRepository(val taskDao: TaskDao) {
     init {
         println("This ($this) is a singleton")
     }
 
-    fun getTodayTasks(): Single<List<Task>> {
-        return Single.fromCallable({
-            val startDay = DateUtils.startCurrentDayDate()
-            val endDay = DateUtils.endCurrentDayDate()
-
-            val parentTaskList = taskDao.loadForTodayScreen(startDay, endDay)
-
-            val parentsTaskIds: List<String> = parentTaskList
-                    .filter { !it.id.isEmpty() }
-                    .map { it.id }
-
-            val childTaskList = taskDao.loadSubTasks(parentsTaskIds)
-
-            for (parentTask in parentTaskList) {
-                childTaskList
-                        .filter { parentTask.id == it.parentId }
-                        .forEach { parentTask.subTasks.add(it) }
-            }
-            parentTaskList
-
-        }).subscribeOn(Schedulers.io())
+    fun getTodayTasks(): Flowable<List<Task>> {
+        val startDay = DateUtils.startCurrentDayDate()
+        val endDay = DateUtils.endCurrentDayDate()
+        return taskDao.loadForTodayScreen(startDay, endDay)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
         //.doOnSubscribe(s -> loadingStatus.setValue(true))
         //.doAfterTerminate(() -> loadingStatus.setValue(false))
@@ -49,34 +34,19 @@ class TaskRepository(val taskDao: TaskDao) {
                 .observeOn(AndroidSchedulers.mainThread())
     }
 
-    /*fun getTasksByDate(date: Date): Flowable<List<Task>> {
+    fun getTasksByDate(date: Date): Flowable<List<Task>> {
         val startDay = DateUtils.startDayDate(date)
         val endDay = DateUtils.endDayDate(date)
         return getTasksByDate(startDay, endDay)
-    }*/
+    }
 
-    /*fun getTasksByDate(startDay: Date, endDay: Date): Flowable<List<Task>> {
-        return Flowable.fromCallable({
-            val parentTaskList = taskDao.loadForTodayScreen(startDay, endDay)
-
-            val parentsTaskIds: List<String> = parentTaskList
-                    .filter { !it.id.isEmpty() }
-                    .map { it.id }
-
-            val childTaskList = taskDao.loadSubTasks(parentsTaskIds)
-
-            for (parentTask in parentTaskList) {
-                childTaskList
-                        .filter { parentTask.id == it.parentId }
-                        .forEach { parentTask.subTasks.add(it) }
-            }
-            parentTaskList
-
-        }).subscribeOn(Schedulers.io())
+    fun getTasksByDate(startDay: Date, endDay: Date): Flowable<List<Task>> {
+        return taskDao.getTasksByDate(startDay, endDay)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
         //.doOnSubscribe(s -> loadingStatus.setValue(true))
         //.doAfterTerminate(() -> loadingStatus.setValue(false))
-    }*/
+    }
 
     /*fun getTodayTasks(): Flowable<List<Task>> {
         val startDay = DateUtils.startCurrentDayDate()
@@ -122,7 +92,7 @@ class TaskRepository(val taskDao: TaskDao) {
         return Flowable.create({ emitter ->
             val startDay = DateUtils.startCurrentDayDate()
             val endDay = DateUtils.endCurrentDayDate()
-            taskDao.loadByDate(startDay, endDay)
+            taskDao.getTasksByDate(startDay, endDay)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .map { Result.success(it) }

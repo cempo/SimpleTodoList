@@ -54,6 +54,8 @@ class Task() {
     @Ignore
     var subTasks: ArrayList<Task> = ArrayList()
 
+    var subTasksCount: Int = 0
+
     fun isDone(): Boolean = isComplete
 
     fun isExpired(): Boolean {

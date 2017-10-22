@@ -29,38 +29,28 @@ interface TaskDao {
     fun loadUnlimitedTasks(): Flowable<List<Task>>
 
 
-    /*@Query("SELECT * FROM task WHERE startDateTimestamp >= :dayDate AND endDateTimestamp < :dayDate")
-    fun loadTasksForDay(dayDate: Date): List<Task>*/
 
-    /*@Query("SELECT * FROM task WHERE startDateTimestamp >= :dayDate AND endDateTimestamp < :dayDate AND statusId = 2")
-    fun loadCompletedTasksForDay(dayDate: Date): List<Task>*/
-
-
-    /*@Query("SELECT * FROM task WHERE (startDateTimestamp BETWEEN :from AND :to) OR (endDateTimestamp BETWEEN :from AND :to)")
-    fun loadByDate(from: Date, to: Date): List<Task>*/
-
-    @Query("SELECT * FROM task WHERE ((dueDateTimestamp BETWEEN :from AND :to) OR " +
-            "dueDateTimestamp is null) AND parentId is null")
-    fun loadForTodayScreen(from: Date, to: Date): List<Task>
-
-    @Query("SELECT * FROM task WHERE ((dueDateTimestamp BETWEEN :from AND :to) OR " +
-            "dueDateTimestamp is null) AND parentId is null")
-    fun getTodayTasks(from: Date, to: Date): Flowable<List<Task>>
+    @Query("SELECT *, (SELECT Count(*) FROM task as sub_task WHERE parentId = parent_task.id ) as subTasksCount " +
+            "FROM task as parent_task " +
+            "WHERE ((dueDateTimestamp BETWEEN :from AND :to) OR dueDateTimestamp is null) AND parentId is null")
+    fun loadForTodayScreen(from: Date, to: Date): Flowable<List<Task>>
 
     @Query("SELECT COUNT (*) FROM task WHERE (dueDateTimestamp BETWEEN :from AND :to) AND parentId is null")
     fun getTasksCount(from: Date, to: Date): Flowable<Int>
 
-    @Query("SELECT * FROM task WHERE dueDateTimestamp BETWEEN :from AND :to")
-    fun loadByDate(from: Date, to: Date): Flowable<List<Task>>
+    @Query("SELECT *, (SELECT Count(*) FROM task as sub_task WHERE parentId = parent_task.id ) as subTasksCount " +
+            "FROM task as parent_task " +
+            "WHERE dueDateTimestamp BETWEEN :from AND :to AND parentId is null")
+    fun getTasksByDate(from: Date, to: Date): Flowable<List<Task>>
 
     @Query("SELECT * FROM task WHERE parentId IN (:parentTaskIds) AND id not null")
     fun loadSubTasks(parentTaskIds: List<String>): List<Task>
 
     @Query("SELECT * FROM task WHERE (dueDateTimestamp BETWEEN :from AND :to) AND isComplete = :isComplete")
-    fun loadByDate(from: Date, to: Date, isComplete: Boolean): Flowable<List<Task>>
+    fun getTasksByDate(from: Date, to: Date, isComplete: Boolean): Flowable<List<Task>>
 
     @Query("SELECT * FROM task WHERE (dueDateTimestamp BETWEEN :from AND :to) AND priorityId = :priority")
-    fun loadByDate(from: Date, to: Date, priority: TaskPriority): Flowable<List<Task>>
+    fun getTasksByDate(from: Date, to: Date, priority: TaskPriority): Flowable<List<Task>>
 
     /*@Query("SELECT * FROM task WHERE endDateTimestamp >= :startDayDate AND endDateTimestamp < :to AND statusId = 0")
     fun loadExpiredTasksForDay(startDayDate: Date, currentDate: Date): List<Task>

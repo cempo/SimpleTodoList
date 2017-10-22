@@ -147,6 +147,7 @@ dependencies {
     compile ('co.infinum:materialdatetimepicker-support:3.3.0') {
         exclude group: 'com.android.support'
     }
+    compile 'devs.mulham.horizontalcalendar:horizontalcalendar:1.1.8'
 
     //Utils
     compile('com.kishan.askpermission:askpermission:1.0.3', {

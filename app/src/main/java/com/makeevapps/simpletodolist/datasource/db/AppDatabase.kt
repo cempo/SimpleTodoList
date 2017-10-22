@@ -12,7 +12,7 @@ import com.makeevapps.simpletodolist.datasource.db.converter.PriorityConverter
 import com.makeevapps.simpletodolist.datasource.db.table.Task
 
 @TypeConverters(DateConverter::class, PriorityConverter::class)
-@Database(entities = arrayOf(Task::class), version = 1)
+@Database(entities = arrayOf(Task::class), version = 2)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDao
 

@@ -18,9 +18,7 @@ class TodayViewModel : ViewModel() {
 
     init {
         App.component.inject(this)
-    }
 
-    fun loadTasks() {
         compositeDisposable.add(taskRepository.getTodayTasks().subscribe({ result -> tasksResponse.value = result }))
     }
 

@@ -6,6 +6,7 @@ import com.makeevapps.simpletodolist.App
 import com.makeevapps.simpletodolist.datasource.db.table.Task
 import com.makeevapps.simpletodolist.repository.TaskRepository
 import io.reactivex.disposables.CompositeDisposable
+import java.util.*
 import javax.inject.Inject
 
 class CalendarViewModel : ViewModel() {
@@ -18,8 +19,23 @@ class CalendarViewModel : ViewModel() {
 
     init {
         App.component.inject(this)
+    }
 
-        compositeDisposable.add(taskRepository.getTodayTasks().subscribe({ result -> tasksResponse.value = result }))
+    fun loadTasks(date: Date) {
+        compositeDisposable.clear()
+        compositeDisposable.add(taskRepository.getTasksByDate(date).subscribe({ result -> tasksResponse.value = result }))
+    }
+
+    fun updateTaskStatus(taskId: String, isComplete: Boolean) {
+        compositeDisposable.add(taskRepository.updateTaskStatus(taskId, isComplete).subscribe())
+    }
+
+    fun insertTask(task: Task) {
+        compositeDisposable.add(taskRepository.insertOrUpdateTask(task).subscribe())
+    }
+
+    fun removeTask(task: Task) {
+        compositeDisposable.add(taskRepository.deleteTask(task).subscribe())
     }
 
     fun addTask(task: Task) {

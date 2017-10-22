@@ -27,7 +27,6 @@ import com.makeevapps.simpletodolist.ui.activity.EditTaskActivity
 import com.makeevapps.simpletodolist.ui.activity.MainActivity
 import com.makeevapps.simpletodolist.ui.adapter.TodayTaskAdapter
 import com.makeevapps.simpletodolist.ui.dialog.DateTimePickerDialog
-import com.makeevapps.simpletodolist.utils.DateUtils
 import com.makeevapps.simpletodolist.viewmodel.TodayViewModel
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.toolbar.*
@@ -37,7 +36,6 @@ class TodayFragment : Fragment(), RecycleViewEventListener {
     private lateinit var model: TodayViewModel
     private lateinit var binding: FragmentTodayBinding
 
-    private lateinit var layoutManager: RecyclerView.LayoutManager
     private lateinit var adapter: TodayTaskAdapter
     private lateinit var wrappedAdapter: RecyclerView.Adapter<*>
     private lateinit var swipeManager: RecyclerViewSwipeManager
@@ -69,14 +67,7 @@ class TodayFragment : Fragment(), RecycleViewEventListener {
         observeTasksResponse()
     }
 
-    override fun onResume() {
-        super.onResume()
-        model.loadTasks()
-    }
-
     private fun prepareRecyclerView(savedInstanceState: Bundle?) {
-        layoutManager = LinearLayoutManager(context)
-
         //Create managers
         swipeManager = RecyclerViewSwipeManager()
         touchActionGuardManager = RecyclerViewTouchActionGuardManager()
@@ -90,7 +81,7 @@ class TodayFragment : Fragment(), RecycleViewEventListener {
         val animator = SwipeDismissItemAnimator()
         animator.supportsChangeAnimations = false
 
-        binding.recyclerView.layoutManager = layoutManager
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = wrappedAdapter
         binding.recyclerView.itemAnimator = animator
         binding.recyclerView.setHasFixedSize(false)
@@ -98,8 +89,6 @@ class TodayFragment : Fragment(), RecycleViewEventListener {
 
         touchActionGuardManager.attachRecyclerView(binding.recyclerView)
         swipeManager.attachRecyclerView(binding.recyclerView)
-
-        observeTasksResponse()
     }
 
     private fun observeTasksResponse() {
@@ -113,38 +102,15 @@ class TodayFragment : Fragment(), RecycleViewEventListener {
         })
     }
 
-    override fun onItemSwipeRight(position: Int, newPosition: Int?) {
-        val item = adapter.dataProvider.getItem(position)
+    override fun onItemSwipeRight(position: Int, newPosition: Int?, item: ConcreteData) {
         Snackbar.make(binding.coordinatorLayout, R.string.task_is_done, Snackbar.LENGTH_LONG)
-                .setAction(R.string.undo, { onItemUndoTaskStatus(position, newPosition) })
-                .setActionTextColor(ContextCompat.getColor(activity, R.color.colorAccent))
-                .show()
+                .setAction(R.string.undo, {
+                    adapter.onUndoTaskStatus(position, newPosition, onSuccess = { task ->
+                        model.insertTask(task)
+                    })
+                }).show()
 
         model.insertTask(item.task)
-    }
-
-    private fun onItemUndoTaskStatus(position: Int, newPosition: Int?) {
-        if (newPosition != null) {
-            adapter.dataProvider.undoLastMovement()
-            adapter.notifyItemMoved(newPosition, position)
-        } else {
-            adapter.dataProvider.undoLastRemoval()
-            adapter.notifyItemInserted(position)
-        }
-
-        val itemData = adapter.dataProvider.getItem(position)
-        val task = itemData.task
-        if (task.isComplete) {
-            task.isComplete = false
-            task.doneDate = null
-        } else {
-            task.isComplete = true
-            task.doneDate = DateUtils.currentTime()
-        }
-
-        model.insertTask(task)
-
-        adapter.notifyItemChanged(position)
     }
 
     override fun onItemSwipeLeft(position: Int) {
@@ -158,31 +124,13 @@ class TodayFragment : Fragment(), RecycleViewEventListener {
             task.allDay = allDay
             task.dueDate = date
 
-            unPinGroupItem(position, item)
+            adapter.unPinGroupItem(position, item)
 
             model.insertTask(task)
         }, onCanceled = {
-            unPinGroupItem(position, item)
+            adapter.unPinGroupItem(position, item)
         })
         dateTimePicker.show(fragmentManager, "DateTimePickerDialog")
-    }
-
-    private fun unPinGroupItem(fromPosition: Int, item: ConcreteData) {
-        item.isPinned = false
-
-        val newPosition = adapter.dataProvider.getValidPosition(item)
-        if (newPosition != null) {
-            if (fromPosition != newPosition) {
-                adapter.dataProvider.moveItem(fromPosition, newPosition)
-                adapter.notifyItemMoved(fromPosition, newPosition)
-                adapter.notifyItemChanged(newPosition)
-            } else {
-                adapter.notifyItemChanged(fromPosition)
-            }
-        } else {
-            adapter.dataProvider.removeItem(fromPosition)
-            adapter.notifyItemRemoved(fromPosition)
-        }
     }
 
     override fun onItemClicked(v: View?, position: Int) {

@@ -11,11 +11,13 @@
         <item name="android:windowAnimationStyle">@style/ActivityAnimation</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
-        <!--<item name="android:buttonStyle">@style/ButtonStyle</item>
-        <item name="buttonStyle">@style/ButtonStyle</item>
-        <item name="android:imageButtonStyle">@style/ButtonStyle</item>
-        <item name="imageButtonStyle">@style/ButtonStyle</item>-->
-        <!--<item name="android:spinnerItemStyle">@style/SpinnerItemStyle</item>-->
+
+        <!-- Colors -->
+        <item name="android:textColorPrimary">?textColorPrimary</item>
+        <item name="android:textColorSecondary">?textColorSecondary</item>
+        <item name="android:textColorPrimaryInverse">?textColorPrimaryInverse</item>
+        <item name="android:textColorSecondaryInverse">?textColorSecondaryInverse</item>
+
         <!-- Custom -->
     </style>
 
@@ -34,10 +36,12 @@
         <item name="colorPrimaryDark">#0077c2</item>
         <item name="colorPrimaryLight">#80d6ff</item>
         <item name="colorAccent">#66bb6a</item>
-        <item name="android:textColorPrimary">#212121</item>
-        <item name="android:textColorSecondary">#757575</item>
-        <item name="android:textColorPrimaryInverse">#e1e7ef</item>
-        <item name="android:textColorSecondaryInverse">#9E9E9E</item>
+
+        <item name="textColorPrimary">#212121</item>
+        <item name="textColorSecondary">#757575</item>
+        <item name="textColorPrimaryInverse">#e1e7ef</item>
+        <item name="textColorSecondaryInverse">#9E9E9E</item>
+
         <item name="android:divider">#BDBDBD</item>
         <item name="android:statusBarColor">#0077c2</item>
         <item name="android:navigationBarColor">#42a5f5</item>
@@ -136,6 +140,13 @@
     <style name="TodayTaskItemDescriptionStyle">
         <item name="android:textAppearance">@style/TextAppearance.ListItem.TodayTasks.Description</item>
         <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="TodayTaskItemSubTaskCountStyle">
+        <item name="android:textAppearance">@style/TextAppearance.ListItem.TodayTasks.SubTaskCount</item>
+        <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:maxLines">1</item>
     </style>

@@ -5,7 +5,6 @@ import android.databinding.DataBindingUtil
 import android.graphics.Paint
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +19,7 @@ import com.h6ah4i.android.widget.advrecyclerview.utils.RecyclerViewAdapterUtils
 import com.makeevapps.simpletodolist.R
 import com.makeevapps.simpletodolist.databinding.ListItemTodayTaskBinding
 import com.makeevapps.simpletodolist.dataproviders.TaskDataProvider
+import com.makeevapps.simpletodolist.datasource.db.table.Task
 import com.makeevapps.simpletodolist.interfaces.RecycleViewEventListener
 import com.makeevapps.simpletodolist.utils.DateUtils
 import com.makeevapps.simpletodolist.utils.extension.asString
@@ -224,22 +224,64 @@ class TodayTaskAdapter(val context: Context,
 
             if (toPosition != null) {
                 adapter!!.dataProvider.moveItem(position, toPosition)
-                adapter!!.notifyItemMoved(position, toPosition)
+                //adapter!!.notifyItemMoved(position, toPosition)
             } else {
                 adapter!!.dataProvider.removeItem(position)
-                adapter!!.notifyItemRemoved(position)
+               // adapter!!.notifyItemRemoved(position)
             }
         }
 
         override fun onSlideAnimationEnd() {
             super.onSlideAnimationEnd()
 
-            adapter!!.eventListener.onItemSwipeRight(position, newPosition)
+            adapter!!.eventListener.onItemSwipeRight(position, newPosition, item)
         }
 
         override fun onCleanUp() {
             super.onCleanUp()
             adapter = null
+        }
+    }
+
+    fun onUndoTaskStatus(position: Int, newPosition: Int?, onSuccess: (task: Task) -> Unit) {
+        if (newPosition != null) {
+            dataProvider.undoLastMovement()
+            //notifyItemMoved(newPosition, position)
+        } else {
+            dataProvider.undoLastRemoval()
+            //notifyItemInserted(position)
+        }
+
+        val itemData = dataProvider.getItem(position)
+        val task = itemData.task
+        if (task.isComplete) {
+            task.isComplete = false
+            task.doneDate = null
+        } else {
+            task.isComplete = true
+            task.doneDate = DateUtils.currentTime()
+        }
+
+        //notifyItemChanged(position)
+
+        onSuccess(task)
+    }
+
+    fun unPinGroupItem(fromPosition: Int, item: TaskDataProvider.ConcreteData) {
+        item.isPinned = false
+
+        val newPosition = dataProvider.getValidPosition(item)
+        if (newPosition != null) {
+            if (fromPosition != newPosition) {
+                dataProvider.moveItem(fromPosition, newPosition)
+                //notifyItemMoved(fromPosition, newPosition)
+                //notifyItemChanged(newPosition)
+            } else {
+               // notifyItemChanged(fromPosition)
+            }
+        } else {
+            dataProvider.removeItem(fromPosition)
+            //notifyItemRemoved(fromPosition)
         }
     }
 }
