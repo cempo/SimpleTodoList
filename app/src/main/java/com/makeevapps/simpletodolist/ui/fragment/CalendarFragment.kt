@@ -125,12 +125,9 @@ class CalendarFragment : Fragment(), RecycleViewEventListener {
             if (tasks != null && tasks.isNotEmpty()) {
                 Logger.e("Refresh task list. Size: " + tasks.size)
 
-                /*releaseRecyclerView()
-                prepareRecyclerView()*/
-
-                adapter.setData(TaskDataProvider(tasks))
+                adapter.setData(tasks)
             } else {
-                adapter.setData(TaskDataProvider())
+                adapter.setData(null)
             }
         })
     }

@@ -35,8 +35,12 @@ class TodayTaskAdapter(val context: Context,
         setHasStableIds(true)
     }
 
-    fun setData(dataProvider: TaskDataProvider) {
-        this.dataProvider = dataProvider
+    fun setData(tasks: List<Task>?) {
+        if (tasks != null) {
+            this.dataProvider.setData(tasks)
+        } else {
+            this.dataProvider.clearData()
+        }
         notifyDataSetChanged()
     }
 

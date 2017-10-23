@@ -32,6 +32,7 @@
     <!-- Task list -->
     <string name="task_is_done">Done</string>
     <string name="sub_tasks_count">%d sub tasks</string>
+    <string name="one_sub_task">1 sub task</string>
 
     <!-- Create task -->
     <string name="new_task">New task</string>

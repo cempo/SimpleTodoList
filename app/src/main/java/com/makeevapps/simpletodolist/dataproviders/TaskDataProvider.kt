@@ -4,7 +4,7 @@ import com.h6ah4i.android.widget.advrecyclerview.expandable.RecyclerViewExpandab
 import com.makeevapps.simpletodolist.datasource.db.table.Task
 import java.util.*
 
-class TaskDataProvider : AbstractDataProvider {
+class TaskDataProvider : AbstractDataProvider() {
     private var data: MutableList<ConcreteData> = LinkedList()
     private var lastRemovedData: ConcreteData? = null
     private var lastRemovedPosition = -1
@@ -12,17 +12,19 @@ class TaskDataProvider : AbstractDataProvider {
     private var lastMovedFromPosition = -1
     private var lastMovedToPosition = -1
 
-    constructor() {
-        data = LinkedList()
-    }
-
-    constructor(tasks: List<Task>) {
+    fun setData(tasks: List<Task>) {
+        clearData()
         (0 until tasks.size)
-                .mapTo(data) { ConcreteData(it.toLong(), tasks[it]) }
+                .mapTo(data) { ConcreteData(tasks[it].id.hashCode().toLong(), tasks[it]) }
                 .sortWith(taskComparator)
     }
 
-    private val taskComparator = compareBy<ConcreteData> { it.task.doneDate }
+    fun clearData() {
+        data.clear()
+    }
+
+    private val taskComparator = compareBy<ConcreteData> { it.task.isComplete }
+            .thenByDescending { it.task.doneDate }
             .thenByDescending { it.task.priority.typeId }
             .thenBy { it.task.dueDate }
             .thenBy { it.task.allDay }
@@ -132,5 +134,9 @@ class TaskDataProvider : AbstractDataProvider {
         override val isSectionHeader = false
 
         override fun toString(): String = task.title
+    }
+
+    init {
+        data = LinkedList()
     }
 }

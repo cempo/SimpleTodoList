@@ -19,7 +19,6 @@ import com.h6ah4i.android.widget.advrecyclerview.touchguard.RecyclerViewTouchAct
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils
 import com.makeevapps.simpletodolist.R
 import com.makeevapps.simpletodolist.databinding.FragmentTodayBinding
-import com.makeevapps.simpletodolist.dataproviders.TaskDataProvider
 import com.makeevapps.simpletodolist.dataproviders.TaskDataProvider.ConcreteData
 import com.makeevapps.simpletodolist.datasource.db.table.Task
 import com.makeevapps.simpletodolist.interfaces.RecycleViewEventListener
@@ -95,9 +94,9 @@ class TodayFragment : Fragment(), RecycleViewEventListener {
         model.getTasksResponse().observe(this, Observer<List<Task>> { tasks ->
             if (tasks != null && tasks.isNotEmpty()) {
                 Logger.e("Refresh task list. Size: " + tasks.size)
-                adapter.setData(TaskDataProvider(tasks))
+                adapter.setData(tasks)
             } else {
-                adapter.setData(TaskDataProvider())
+                adapter.setData(null)
             }
         })
     }

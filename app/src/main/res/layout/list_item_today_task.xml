@@ -45,7 +45,7 @@
                         android:visibility="@{task.description==null ? View.GONE : View.VISIBLE}"/>
                     <TextView
                         style="@style/TodayTaskItemSubTaskCountStyle"
-                        android:text="@{String.valueOf(task.subTasksCount)}"
+                        android:text="@{task.subTasksCount>1 ? String.format(@string/sub_tasks_count, task.subTasksCount):@string/one_sub_task}"
                         android:visibility="@{task.subTasksCount==0 ? View.GONE : View.VISIBLE}"/>
                 </LinearLayout>
                 <TextView
