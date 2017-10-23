@@ -2,11 +2,11 @@ package com.makeevapps.simpletodolist.repository
 
 import com.makeevapps.simpletodolist.datasource.db.TaskDao
 import com.makeevapps.simpletodolist.datasource.db.table.Task
+import com.makeevapps.simpletodolist.reminders.AlarmScheduler
 import com.makeevapps.simpletodolist.utils.DateUtils
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.*
@@ -122,7 +122,6 @@ class TaskRepository(val taskDao: TaskDao) {
                 .observeOn(AndroidSchedulers.mainThread())
     }
 
-
     fun getUnlimitedTasks(): Flowable<List<Task>> {
         return taskDao.loadUnlimitedTasks()
     }
@@ -130,31 +129,38 @@ class TaskRepository(val taskDao: TaskDao) {
     fun insertOrUpdateTask(task: Task): Completable {
         return Completable.fromCallable({
             taskDao.insert(task)
+
+            if (task.dueDate != null) {
+                AlarmScheduler.scheduleAlarm(task.dueDate!!.time, task.id)
+            } else {
+                AlarmScheduler.removeAlarm(task.id)
+            }
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun updateTaskStatus(taskId: String, isComplete: Boolean): Completable {
+    fun updateTaskStatus(task: Task, isComplete: Boolean): Completable {
         return Completable.fromCallable({
-            taskDao.updateTaskStatus(taskId, isComplete)
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-    }
+            taskDao.updateTaskStatus(task.id, isComplete)
 
-    fun deleteAllTasks() {
-        Maybe.fromCallable({
-            taskDao.deleteAll()
+            if (!isComplete && task.dueDate != null) {
+                AlarmScheduler.scheduleAlarm(task.dueDate!!.time, task.id)
+            } else {
+                AlarmScheduler.removeAlarm(task.id)
+            }
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe()
     }
 
     fun deleteTask(task: Task): Completable {
         return Completable.fromCallable({
             taskDao.delete(task)
+
+            if (task.dueDate != null) {
+                AlarmScheduler.removeAlarm(task.id)
+            }
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

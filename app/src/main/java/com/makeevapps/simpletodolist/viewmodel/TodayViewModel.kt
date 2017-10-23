@@ -22,20 +22,12 @@ class TodayViewModel : ViewModel() {
         compositeDisposable.add(taskRepository.getTodayTasks().subscribe({ result -> tasksResponse.value = result }))
     }
 
-    fun updateTaskStatus(taskId: String, isComplete: Boolean) {
-        compositeDisposable.add(taskRepository.updateTaskStatus(taskId, isComplete).subscribe())
-    }
-
     fun insertTask(task: Task) {
         compositeDisposable.add(taskRepository.insertOrUpdateTask(task).subscribe())
     }
 
     fun removeTask(task: Task) {
         compositeDisposable.add(taskRepository.deleteTask(task).subscribe())
-    }
-
-    fun deleteAllTasks() {
-        taskRepository.deleteAllTasks()
     }
 
     fun getTasksResponse(): MutableLiveData<List<Task>> = tasksResponse

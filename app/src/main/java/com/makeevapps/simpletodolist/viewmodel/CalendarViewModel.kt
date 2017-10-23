@@ -26,10 +26,6 @@ class CalendarViewModel : ViewModel() {
         compositeDisposable.add(taskRepository.getTasksByDate(date).subscribe({ result -> tasksResponse.value = result }))
     }
 
-    fun updateTaskStatus(taskId: String, isComplete: Boolean) {
-        compositeDisposable.add(taskRepository.updateTaskStatus(taskId, isComplete).subscribe())
-    }
-
     fun insertTask(task: Task) {
         compositeDisposable.add(taskRepository.insertOrUpdateTask(task).subscribe())
     }
@@ -40,10 +36,6 @@ class CalendarViewModel : ViewModel() {
 
     fun addTask(task: Task) {
         taskRepository.insertOrUpdateTask(task)
-    }
-
-    fun deleteAllTasks() {
-        taskRepository.deleteAllTasks()
     }
 
     fun getTasksResponse(): MutableLiveData<List<Task>> = tasksResponse
