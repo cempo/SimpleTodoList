@@ -30,6 +30,7 @@ class TodayTaskAdapter(val context: Context,
 
     var textColorSecondary = ContextCompat.getColor(context, R.color.text_color_secondary)
     var textColorPrimary = ContextCompat.getColor(context, R.color.text_color_primary)
+    var textColorExpiredTask = ContextCompat.getColor(context, R.color.text_color_expired_task)
 
     init {
         setHasStableIds(true)
@@ -75,30 +76,41 @@ class TodayTaskAdapter(val context: Context,
         val item = dataProvider.getItem(position)
         holder.binding.task = item.task
 
-        var dateString: String? = ""
-        if (item.task.isPlanedForToday()) {
-            dateString = if (item.task.allDay) {
+        val isExpired = item.task.isExpired()
+
+        var dateString: String = when {
+            item.task.isDone() -> ""
+            isExpired -> item.task.dueDate?.asString(DateUtils.SHORT_DATE_FORMAT) ?: ""
+            item.task.isPlaned() -> if (item.task.allDay) {
                 context.getString(R.string.all_day)
             } else {
-                item.task.dueDate?.asString(DateUtils.TIME_FORMAT)
+                item.task.dueDate?.asString(DateUtils.TIME_FORMAT) ?: ""
             }
-        } else if (item.task.isExpired()) {
-            dateString = item.task.dueDate?.asString(DateUtils.SHORT_DATE_FORMAT)
+            else -> ""
         }
 
-        if (!dateString.isNullOrEmpty()) {
+        if (!dateString.isEmpty()) {
             holder.binding.dateTextView?.visibility = View.VISIBLE
             holder.binding.dateTextView?.text = dateString
         } else {
             holder.binding.dateTextView?.visibility = View.GONE
         }
 
-        if (item.task.isComplete) {
-            holder.binding.nameTextView.paintFlags = holder.binding.nameTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-            holder.binding.nameTextView.setTextColor(textColorSecondary)
-        } else {
-            holder.binding.nameTextView.paintFlags = holder.binding.nameTextView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-            holder.binding.nameTextView.setTextColor(textColorPrimary)
+        holder.binding.dateTextView?.setTextColor(if (isExpired) textColorExpiredTask else textColorSecondary)
+
+        when {
+            item.task.isDone() -> {
+                holder.binding.nameTextView.paintFlags = holder.binding.nameTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                holder.binding.nameTextView.setTextColor(textColorSecondary)
+            }
+            isExpired -> {
+                holder.binding.nameTextView.paintFlags = holder.binding.nameTextView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                holder.binding.nameTextView.setTextColor(textColorExpiredTask)
+            }
+            else -> {
+                holder.binding.nameTextView.paintFlags = holder.binding.nameTextView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                holder.binding.nameTextView.setTextColor(textColorPrimary)
+            }
         }
 
         val swipeState = holder.swipeStateFlags

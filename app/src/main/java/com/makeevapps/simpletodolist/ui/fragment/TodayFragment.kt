@@ -29,6 +29,7 @@ import com.makeevapps.simpletodolist.ui.dialog.DateTimePickerDialog
 import com.makeevapps.simpletodolist.viewmodel.TodayViewModel
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.toolbar.*
+import java.util.*
 
 
 class TodayFragment : Fragment(), RecycleViewEventListener {
@@ -128,6 +129,7 @@ class TodayFragment : Fragment(), RecycleViewEventListener {
             model.insertTask(task)
         }, onCanceled = {
             adapter.unPinGroupItem(position, item)
+            adapter.notifyDataSetChanged()
         })
         dateTimePicker.show(fragmentManager, "DateTimePickerDialog")
     }
@@ -138,8 +140,7 @@ class TodayFragment : Fragment(), RecycleViewEventListener {
     }
 
     fun onAddButtonClick(view: View) {
-        activity.startActivity(EditTaskActivity.getActivityIntent(activity))
-        //ToastUtils.showSimpleToast(activity, "Add clicked")
+        activity.startActivity(EditTaskActivity.getActivityIntent(activity, null, Calendar.getInstance().time))
     }
 
     override fun onDestroyView() {

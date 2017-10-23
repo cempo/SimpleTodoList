@@ -29,14 +29,20 @@ class TaskDataProvider : AbstractDataProvider() {
     }
 
     fun clearData() {
+        lastRemovedData = null
+        lastRemovedPosition = -1
+
+        lastMovedFromPosition = -1
+        lastMovedToPosition = -1
+
         data.clear()
     }
 
 
     private val taskComparator = compareBy<ConcreteData> { it.task.isComplete }
             .thenByDescending { it.task.doneDate }
-            .thenByDescending { it.task.priority.typeId }
             .thenBy { it.task.dueDate }
+            .thenByDescending { it.task.priority.typeId }
             .thenBy { it.task.allDay }
             .thenBy { it.task.title }
 

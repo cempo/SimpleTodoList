@@ -81,7 +81,11 @@ class Task() {
 
     fun isPlanedForToday(): Boolean = isPlanedForDay(DateUtils.currentTime())
 
-    fun isPlanedForDay(date: Date): Boolean = dueDate != null && dueDate!! <= DateUtils.endDayDate(date)
+    fun isPlanedForDay(date: Date): Boolean {
+        val startDayDate = DateUtils.startDayDate(date)
+        val endDayDate = DateUtils.endDayDate(date)
+        return dueDate != null && dueDate!! > startDayDate && dueDate!! <= endDayDate
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

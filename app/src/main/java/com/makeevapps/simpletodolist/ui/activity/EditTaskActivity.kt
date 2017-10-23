@@ -23,10 +23,11 @@ import com.makeevapps.simpletodolist.ui.dialog.EditTaskPriorityDialog
 import com.makeevapps.simpletodolist.utils.DateUtils
 import com.makeevapps.simpletodolist.utils.ToastUtils
 import com.makeevapps.simpletodolist.utils.extension.asString
+import com.makeevapps.simpletodolist.utils.extension.endDayDate
 import com.makeevapps.simpletodolist.viewmodel.EditTaskViewModel
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.toolbar.*
-
+import java.util.*
 
 class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener, CheckBoxCheckedListener {
     lateinit var model: EditTaskViewModel
@@ -34,9 +35,12 @@ class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener, CheckBoxC
     lateinit var subTaskAdapter: SubTaskAdapter
 
     companion object {
-        fun getActivityIntent(context: Context, taskId: String? = null): Intent {
+        fun getActivityIntent(context: Context, taskId: String? = null, dueDate: Date? = null): Intent {
             val intent = Intent(context, EditTaskActivity::class.java)
             intent.putExtra("taskId", taskId)
+            if (dueDate != null) {
+                intent.putExtra("dueDate", dueDate.time)
+            }
             return intent
         }
     }
@@ -46,7 +50,11 @@ class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener, CheckBoxC
         setTheme(model.getThemeResId())
         super.onCreate(savedInstanceState)
 
-        model.loadTask(intent.extras.getString("taskId"))
+        val taskId = intent.extras.getString("taskId")
+        val longDate = intent.extras.getLong("dueDate")
+        val dueDate = if (longDate > 0) Date(longDate).endDayDate() else null
+
+        model.loadTask(taskId, dueDate)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_task)
         binding.controller = this
@@ -88,11 +96,6 @@ class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener, CheckBoxC
     fun onDescriptionTextChanged(text: CharSequence) {
         model.newTask.description = text.toString()
     }
-
-    /*fun onAllDayCheckedChanged(isCheck: Boolean) {
-        model.newTask.allDay = isCheck
-        ToastUtils.showSimpleToast(this, "onAllDayCheckedChanged: $isCheck")
-    }*/
 
     fun onDateTimeButtonClick(view: View?) {
         val currentDate = model.newTask.dueDate

@@ -5,6 +5,7 @@
     <attr name="textColorPrimaryInverse" format="color"/>
     <attr name="textColorSecondary" format="color"/>
     <attr name="textColorSecondaryInverse" format="color"/>
+    <attr name="textColorExpiredTask" format="color"/>
 
     <attr name="toolbarIconColor" format="color"/>
     <attr name="toolbarTitleColor" format="color"/>

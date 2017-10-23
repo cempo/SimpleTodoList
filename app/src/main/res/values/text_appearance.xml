@@ -58,7 +58,7 @@
     </style>
 
     <style name="TextAppearance.ListItem.TodayTasks.Date">
-        <item name="android:textStyle">bold</item>
+        <!--<item name="android:textStyle">bold</item>-->
         <item name="android:textSize">@dimen/text_size_18sp</item>
         <item name="android:textColor">?android:textColorSecondary</item>
     </style>

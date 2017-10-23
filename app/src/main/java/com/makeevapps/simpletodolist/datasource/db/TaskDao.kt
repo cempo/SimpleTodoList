@@ -29,13 +29,14 @@ interface TaskDao {
     fun loadUnlimitedTasks(): Flowable<List<Task>>
 
 
-
     @Query("SELECT *, (SELECT Count(*) FROM task as sub_task WHERE parentId = parent_task.id ) as subTasksCount " +
             "FROM task as parent_task " +
-            "WHERE ((dueDateTimestamp BETWEEN :from AND :to) OR dueDateTimestamp is null) AND parentId is null")
+            "WHERE ((dueDateTimestamp BETWEEN :from AND :to) OR " +
+            "(dueDateTimestamp < :from AND isComplete = 0) OR " +
+            "dueDateTimestamp is null) AND parentId is null")
     fun loadForTodayScreen(from: Date, to: Date): Flowable<List<Task>>
 
-    @Query("SELECT COUNT (*) FROM task WHERE (dueDateTimestamp BETWEEN :from AND :to) AND parentId is null")
+    @Query("SELECT Count (*) FROM task WHERE (dueDateTimestamp BETWEEN :from AND :to) AND parentId is null")
     fun getTasksCount(from: Date, to: Date): Flowable<Int>
 
     @Query("SELECT *, (SELECT Count(*) FROM task as sub_task WHERE parentId = parent_task.id ) as subTasksCount " +

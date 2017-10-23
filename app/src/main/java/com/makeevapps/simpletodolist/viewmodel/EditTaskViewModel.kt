@@ -10,6 +10,7 @@ import com.makeevapps.simpletodolist.enums.ThemeStyle
 import com.makeevapps.simpletodolist.repository.TaskRepository
 import com.orhanobut.logger.Logger
 import io.reactivex.disposables.CompositeDisposable
+import java.util.*
 import javax.inject.Inject
 
 
@@ -32,9 +33,9 @@ class EditTaskViewModel : ViewModel() {
 
     fun getThemeResId(): Int = ThemeStyle.getThemeById(preferenceManager.getThemeId()).themeResId
 
-    fun loadTask(taskId: String?) {
-        if (taskId != null && !taskId.isEmpty()) {
-            compositeDisposable.add(taskRepository.getTaskByIdOnce(taskId).subscribe(
+    fun loadTask(taskId: String?, dueDate: Date?) {
+        if (!taskId.isNullOrEmpty()) {
+            compositeDisposable.add(taskRepository.getTaskByIdOnce(taskId!!).subscribe(
                     { result ->
                         taskResponse.value = result
                         oldTask = result
@@ -44,22 +45,25 @@ class EditTaskViewModel : ViewModel() {
                     }
             ))
         } else {
+            if (dueDate != null) {
+                newTask.dueDate = dueDate
+                taskResponse.value = newTask
+            }
+
             loadSubTasks(newTask.id)
         }
     }
 
-    fun loadSubTasks(taskId: String?) {
-        if (taskId != null && !taskId.isEmpty()) {
-            compositeDisposable.add(taskRepository.getSubTasks(taskId).subscribe(
-                    { result ->
-                        subTaskResponse.value = result
-                    }
-            ))
-        }
+    private fun loadSubTasks(taskId: String) {
+        compositeDisposable.add(taskRepository.getSubTasks(taskId).subscribe(
+                { result ->
+                    subTaskResponse.value = result
+                }
+        ))
     }
 
     fun insertOrUpdateTask(onSuccess: () -> Unit, onError: (message: Int) -> Unit) {
-        if (newTask.title.isNullOrEmpty()) {
+        if (newTask.title.isEmpty()) {
             onError(R.string.error_title_empty)
         } else {
             taskRepository.insertOrUpdateTask(newTask).subscribe {

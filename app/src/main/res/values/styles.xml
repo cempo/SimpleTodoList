@@ -41,6 +41,7 @@
         <item name="textColorSecondary">#757575</item>
         <item name="textColorPrimaryInverse">#e1e7ef</item>
         <item name="textColorSecondaryInverse">#9E9E9E</item>
+        <item name="textColorExpiredTask">#e53935</item>
 
         <item name="android:divider">#BDBDBD</item>
         <item name="android:statusBarColor">#0077c2</item>

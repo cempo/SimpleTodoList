@@ -40,6 +40,6 @@
             android:src="@drawable/ic_add_black_24dp"
             android:layout_gravity="bottom|end"
             app:layout_behavior="com.makeevapps.simpletodolist.ui.view.ScrollAwareFABBehavior"
-            android:onClick="@{controller.addTask}"/>
+            android:onClick="@{controller.onAddButtonClick}"/>
     </android.support.design.widget.CoordinatorLayout>
 </layout>

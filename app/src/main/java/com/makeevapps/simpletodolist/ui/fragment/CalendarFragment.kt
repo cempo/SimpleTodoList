@@ -19,7 +19,6 @@ import com.h6ah4i.android.widget.advrecyclerview.touchguard.RecyclerViewTouchAct
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils
 import com.makeevapps.simpletodolist.R
 import com.makeevapps.simpletodolist.databinding.FragmentCalendarBinding
-import com.makeevapps.simpletodolist.dataproviders.TaskDataProvider
 import com.makeevapps.simpletodolist.dataproviders.TaskDataProvider.ConcreteData
 import com.makeevapps.simpletodolist.datasource.db.table.Task
 import com.makeevapps.simpletodolist.interfaces.RecycleViewEventListener
@@ -67,7 +66,6 @@ class CalendarFragment : Fragment(), RecycleViewEventListener {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //TODO Add logic
         val activity = activity as MainActivity
         activity.setToolbar(toolbar, true, true, getString(R.string.calendar))
 
@@ -78,11 +76,9 @@ class CalendarFragment : Fragment(), RecycleViewEventListener {
     }
 
     fun setupCalendar() {
-        /** end after 1 month from now */
         val endDate = Calendar.getInstance()
         endDate.add(Calendar.MONTH, 1)
 
-        /** start before 1 month from now */
         val startDate = Calendar.getInstance()
         startDate.add(Calendar.MONTH, -1)
 
@@ -169,8 +165,8 @@ class CalendarFragment : Fragment(), RecycleViewEventListener {
         activity.startActivity(EditTaskActivity.getActivityIntent(activity, item.task.id))
     }
 
-    fun addTask(view: View?) {
-        activity.startActivity(EditTaskActivity.getActivityIntent(activity))
+    fun onAddButtonClick(view: View?) {
+        activity.startActivity(EditTaskActivity.getActivityIntent(activity, null, horizontalCalendar.selectedDate))
     }
 
     private fun releaseRecyclerView() {
