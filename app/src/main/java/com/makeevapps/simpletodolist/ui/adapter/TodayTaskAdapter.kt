@@ -274,7 +274,6 @@ class TodayTaskAdapter(val context: Context,
             task.doneDate = DateUtils.currentTime()
         }
 
-
         onSuccess(task)
     }
 

@@ -2,6 +2,7 @@ package com.makeevapps.simpletodolist.di
 
 import android.app.Application
 import com.makeevapps.simpletodolist.App
+import com.makeevapps.simpletodolist.receiver.NotificationReceiver
 import com.makeevapps.simpletodolist.reminders.ReminderAlarmService
 import com.makeevapps.simpletodolist.viewmodel.*
 import dagger.Component
@@ -20,6 +21,7 @@ interface AppComponent {
     fun inject(viewModel: SettingsViewModel)
 
     fun inject(service: ReminderAlarmService)
+    fun inject(receiver: NotificationReceiver)
 
     companion object {
         fun buildAppComponent(application: Application) =

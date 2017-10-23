@@ -34,13 +34,9 @@ class CalendarViewModel : ViewModel() {
         compositeDisposable.add(taskRepository.deleteTask(task).subscribe())
     }
 
-    fun addTask(task: Task) {
-        taskRepository.insertOrUpdateTask(task)
-    }
-
     fun getTasksResponse(): MutableLiveData<List<Task>> = tasksResponse
 
-    fun onDestroy() {
-        compositeDisposable.dispose()
+    override fun onCleared() {
+        compositeDisposable.clear()
     }
 }

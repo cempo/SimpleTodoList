@@ -26,10 +26,10 @@ import com.makeevapps.simpletodolist.ui.activity.EditTaskActivity
 import com.makeevapps.simpletodolist.ui.activity.MainActivity
 import com.makeevapps.simpletodolist.ui.adapter.TodayTaskAdapter
 import com.makeevapps.simpletodolist.ui.dialog.DateTimePickerDialog
+import com.makeevapps.simpletodolist.utils.DateUtils
 import com.makeevapps.simpletodolist.viewmodel.TodayViewModel
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.toolbar.*
-import java.util.*
 
 
 class TodayFragment : Fragment(), RecycleViewEventListener {
@@ -106,11 +106,11 @@ class TodayFragment : Fragment(), RecycleViewEventListener {
         Snackbar.make(binding.coordinatorLayout, R.string.task_is_done, Snackbar.LENGTH_LONG)
                 .setAction(R.string.undo, {
                     adapter.onUndoTaskStatus(position, newPosition, onSuccess = { task ->
-                        model.insertTask(task)
+                        model.insertOrUpdateTask(task)
                     })
                 }).show()
 
-        model.insertTask(item.task)
+        model.insertOrUpdateTask(item.task)
     }
 
     override fun onItemSwipeLeft(position: Int) {
@@ -126,7 +126,7 @@ class TodayFragment : Fragment(), RecycleViewEventListener {
 
             adapter.unPinGroupItem(position, item)
 
-            model.insertTask(task)
+            model.insertOrUpdateTask(task)
         }, onCanceled = {
             adapter.unPinGroupItem(position, item)
             adapter.notifyDataSetChanged()
@@ -140,7 +140,7 @@ class TodayFragment : Fragment(), RecycleViewEventListener {
     }
 
     fun onAddButtonClick(view: View) {
-        activity.startActivity(EditTaskActivity.getActivityIntent(activity, null, Calendar.getInstance().time))
+        activity.startActivity(EditTaskActivity.getActivityIntent(activity, null, DateUtils.currentTime()))
     }
 
     override fun onDestroyView() {

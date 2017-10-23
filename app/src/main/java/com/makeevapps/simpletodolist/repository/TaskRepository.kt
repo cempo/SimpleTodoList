@@ -130,7 +130,7 @@ class TaskRepository(val taskDao: TaskDao) {
         return Completable.fromCallable({
             taskDao.insert(task)
 
-            if (task.dueDate != null) {
+            if (!task.isComplete && task.dueDate != null) {
                 AlarmScheduler.scheduleAlarm(task.dueDate!!.time, task.id)
             } else {
                 AlarmScheduler.removeAlarm(task.id)

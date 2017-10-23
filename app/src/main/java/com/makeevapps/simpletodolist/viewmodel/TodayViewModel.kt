@@ -22,7 +22,7 @@ class TodayViewModel : ViewModel() {
         compositeDisposable.add(taskRepository.getTodayTasks().subscribe({ result -> tasksResponse.value = result }))
     }
 
-    fun insertTask(task: Task) {
+    fun insertOrUpdateTask(task: Task) {
         compositeDisposable.add(taskRepository.insertOrUpdateTask(task).subscribe())
     }
 
