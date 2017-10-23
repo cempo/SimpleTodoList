@@ -2,6 +2,7 @@ package com.makeevapps.simpletodolist.dataproviders
 
 import com.h6ah4i.android.widget.advrecyclerview.expandable.RecyclerViewExpandableItemManager
 import com.makeevapps.simpletodolist.datasource.db.table.Task
+import java.math.BigInteger
 import java.util.*
 
 class TaskDataProvider : AbstractDataProvider() {
@@ -15,13 +16,22 @@ class TaskDataProvider : AbstractDataProvider() {
     fun setData(tasks: List<Task>) {
         clearData()
         (0 until tasks.size)
-                .mapTo(data) { ConcreteData(tasks[it].id.hashCode().toLong(), tasks[it]) }
+                .mapTo(data) {
+                    val task = tasks[it]
+                    ConcreteData(prepareId(task.id.hashCode()), task)
+                }
                 .sortWith(taskComparator)
+    }
+
+    private fun prepareId(value: Int): Long {
+        val byteArray = byteArrayOf((value shr 16).toByte(), (value shr 8).toByte(), value.toByte())
+        return BigInteger(1, byteArray).toLong()
     }
 
     fun clearData() {
         data.clear()
     }
+
 
     private val taskComparator = compareBy<ConcreteData> { it.task.isComplete }
             .thenByDescending { it.task.doneDate }
