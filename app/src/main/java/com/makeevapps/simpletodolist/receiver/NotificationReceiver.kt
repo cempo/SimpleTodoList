@@ -51,6 +51,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 val taskId = intent.getStringExtra("taskId")
                 context.startActivity(SnoozeActivity.getActivityIntent(context, taskId))
                 notificationUtils.hideNotification(context, NotificationUtils.TASK_NOTIFICATION_ID)
+                notificationUtils.collapsePanel(context)
             }
             DONE_NOTIFICATION_ACTION -> {
                 val taskId = intent.getStringExtra("taskId")
@@ -63,6 +64,7 @@ class NotificationReceiver : BroadcastReceiver() {
                     })
 
                     notificationUtils.hideNotification(context, NotificationUtils.TASK_NOTIFICATION_ID)
+                    notificationUtils.collapsePanel(context)
                 })
             }
         }

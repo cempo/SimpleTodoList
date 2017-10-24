@@ -85,6 +85,10 @@ class NotificationUtils {
         notificationManager.cancel(id)
     }
 
+    fun collapsePanel(context: Context) {
+        context.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
+    }
+
     /*fun getPendingIntent(context: Context, intent: Intent, parentClass: Class<*>?, intentFlag: Int): PendingIntent {
         return if (parentClass != null) {
             val stackBuilder = TaskStackBuilder.create(context)
