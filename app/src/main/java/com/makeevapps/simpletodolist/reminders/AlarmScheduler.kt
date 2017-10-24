@@ -7,26 +7,16 @@ import com.makeevapps.simpletodolist.App
 /**
  * Helper to manage scheduling the reminder alarm
  */
-object AlarmScheduler {
+class AlarmScheduler(val context: Context) {
+    private val alarmManager: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-    /**
-     * Schedule a reminder alarm at the specified time for the given task.
-     *
-     * @param context        Local application or activity context
-     * @param alarmTime      Alarm start time
-     * @param reminderTaskId Id referencing the task in the DB
-     */
     fun scheduleAlarm(alarmTime: Long, reminderTaskId: String) {
-        //Schedule the alarm. Will update an existing item for the same task.
-        val manager = AlarmManagerProvider.getAlarmManager(App.instance)
-        val operation = ReminderAlarmService.getReminderPendingIntent(App.instance, reminderTaskId)
-        manager.setExact(AlarmManager.RTC, alarmTime, operation)
+        val pendingIntent = ReminderReceiver.getReminderPendingIntent(context, reminderTaskId)
+        alarmManager.setExact(AlarmManager.RTC, alarmTime, pendingIntent)
     }
 
     fun removeAlarm(taskId: String) {
-        //Cancel any reminders that might be set for this item
-        val manager = AlarmManagerProvider.getAlarmManager(App.instance)
-        val operation = ReminderAlarmService.getReminderPendingIntent(App.instance, taskId)
-        manager.cancel(operation)
+        val pendingIntent = ReminderReceiver.getReminderPendingIntent(context, taskId)
+        alarmManager.cancel(pendingIntent)
     }
 }

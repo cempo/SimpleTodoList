@@ -132,11 +132,11 @@ class CalendarFragment : Fragment(), RecycleViewEventListener {
         Snackbar.make(binding.coordinatorLayout, R.string.task_is_done, Snackbar.LENGTH_LONG)
                 .setAction(R.string.undo, {
                     adapter.onUndoTaskStatus(position, newPosition, onSuccess = { task ->
-                        model.insertTask(task)
+                        model.insertOrUpdateTask(task)
                     })
                 }).show()
 
-        model.insertTask(item.task)
+        model.insertOrUpdateTask(item.task)
     }
 
     override fun onItemSwipeLeft(position: Int) {
@@ -152,7 +152,7 @@ class CalendarFragment : Fragment(), RecycleViewEventListener {
 
             adapter.unPinGroupItem(position, item)
 
-            model.insertTask(task)
+            model.insertOrUpdateTask(task)
         }, onCanceled = {
             adapter.unPinGroupItem(position, item)
             adapter.notifyDataSetChanged()

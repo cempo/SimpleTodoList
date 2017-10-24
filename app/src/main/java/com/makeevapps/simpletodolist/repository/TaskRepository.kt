@@ -11,7 +11,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 
-class TaskRepository(val taskDao: TaskDao) {
+class TaskRepository(val taskDao: TaskDao, val alarmScheduler: AlarmScheduler) {
     init {
         println("This ($this) is a singleton")
     }
@@ -131,23 +131,9 @@ class TaskRepository(val taskDao: TaskDao) {
             taskDao.insert(task)
 
             if (!task.isComplete && task.dueDate != null) {
-                AlarmScheduler.scheduleAlarm(task.dueDate!!.time, task.id)
+                alarmScheduler.scheduleAlarm(task.dueDate!!.time, task.id)
             } else {
-                AlarmScheduler.removeAlarm(task.id)
-            }
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-    }
-
-    fun updateTaskStatus(task: Task, isComplete: Boolean): Completable {
-        return Completable.fromCallable({
-            taskDao.updateTaskStatus(task.id, isComplete)
-
-            if (!isComplete && task.dueDate != null) {
-                AlarmScheduler.scheduleAlarm(task.dueDate!!.time, task.id)
-            } else {
-                AlarmScheduler.removeAlarm(task.id)
+                alarmScheduler.removeAlarm(task.id)
             }
         })
                 .subscribeOn(Schedulers.io())
@@ -159,7 +145,7 @@ class TaskRepository(val taskDao: TaskDao) {
             taskDao.delete(task)
 
             if (task.dueDate != null) {
-                AlarmScheduler.removeAlarm(task.id)
+                alarmScheduler.removeAlarm(task.id)
             }
         })
                 .subscribeOn(Schedulers.io())

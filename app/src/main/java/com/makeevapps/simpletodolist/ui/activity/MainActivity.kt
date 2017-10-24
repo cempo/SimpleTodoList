@@ -44,7 +44,7 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         model = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        setTheme(ThemeStyle.getThemeById(model.preferenceManager.getThemeId()).themeResId)
+        setTheme(model.getThemeResId())
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)

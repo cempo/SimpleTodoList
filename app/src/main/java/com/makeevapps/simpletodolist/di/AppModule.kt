@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import com.makeevapps.simpletodolist.datasource.db.AppDatabase
 import com.makeevapps.simpletodolist.datasource.preferences.PreferenceManager
+import com.makeevapps.simpletodolist.reminders.AlarmScheduler
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -28,5 +29,11 @@ class AppModule(val application: Application) {
     @Singleton
     internal fun providePreferencesManager(context: Context): PreferenceManager {
         return PreferenceManager(context)
+    }
+
+    @Provides
+    @Singleton
+    internal fun provideAlarmScheduler(context: Context): AlarmScheduler {
+        return AlarmScheduler(context)
     }
 }

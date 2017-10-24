@@ -26,7 +26,7 @@ class CalendarViewModel : ViewModel() {
         compositeDisposable.add(taskRepository.getTasksByDate(date).subscribe({ result -> tasksResponse.value = result }))
     }
 
-    fun insertTask(task: Task) {
+    fun insertOrUpdateTask(task: Task) {
         compositeDisposable.add(taskRepository.insertOrUpdateTask(task).subscribe())
     }
 

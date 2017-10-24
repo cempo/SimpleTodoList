@@ -1,6 +1,7 @@
 package com.makeevapps.simpletodolist.di
 
 import com.makeevapps.simpletodolist.datasource.db.TaskDao
+import com.makeevapps.simpletodolist.reminders.AlarmScheduler
 import com.makeevapps.simpletodolist.repository.TaskRepository
 import dagger.Module
 import dagger.Provides
@@ -11,8 +12,8 @@ class RepositoriesModule {
 
     @Provides
     @Singleton
-    internal fun provideTaskRepository(taskDao: TaskDao): TaskRepository {
-        return TaskRepository(taskDao)
+    internal fun provideTaskRepository(taskDao: TaskDao, alarmScheduler: AlarmScheduler): TaskRepository {
+        return TaskRepository(taskDao, alarmScheduler)
     }
 
 }

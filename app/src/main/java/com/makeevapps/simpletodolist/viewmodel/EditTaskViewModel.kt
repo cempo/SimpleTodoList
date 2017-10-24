@@ -37,9 +37,9 @@ class EditTaskViewModel : ViewModel() {
         if (!taskId.isNullOrEmpty()) {
             compositeDisposable.add(taskRepository.getTaskByIdOnce(taskId!!).subscribe(
                     { result ->
-                        taskResponse.value = result
                         oldTask = result
                         newTask = result
+                        taskResponse.value = result
 
                         loadSubTasks(newTask.id)
                     }
