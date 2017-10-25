@@ -12,6 +12,7 @@ import com.makeevapps.simpletodolist.databinding.ViewDatePickerTimeButtonBinding
 import com.makeevapps.simpletodolist.utils.DateUtils
 import com.makeevapps.simpletodolist.utils.extension.asString
 import com.makeevapps.simpletodolist.utils.extension.endDayDate
+import com.makeevapps.simpletodolist.utils.extension.toEndDay
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import java.util.*
 
@@ -82,7 +83,7 @@ class DateTimePickerDialog() : DatePickerDialog(), DatePickerDialog.OnDateSetLis
 
                 binding.time.text = calendar.time.asString(DateUtils.TIME_FORMAT)
             } else {
-                newDateCalendar.time.endDayDate()
+                newDateCalendar.toEndDay()
 
                 allDay = true
 

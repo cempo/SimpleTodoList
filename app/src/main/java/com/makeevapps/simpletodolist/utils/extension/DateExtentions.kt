@@ -1,4 +1,4 @@
-@file:JvmName("CalendarExtensions")
+@file:JvmName("DateExtensions")
 
 package com.makeevapps.simpletodolist.utils.extension
 
@@ -20,13 +20,12 @@ fun Date.startDayDate(): Date {
 }
 
 fun Date.endDayDate(): Date {
-    val cal = Calendar.getInstance()
-    cal.time = this
-    cal.set(Calendar.HOUR_OF_DAY, 23)
-    cal.set(Calendar.MINUTE, 59)
-    cal.set(Calendar.SECOND, 59)
-    cal.set(Calendar.MILLISECOND, 999)
-    return cal.time
+    calendar.time = this
+    calendar.set(Calendar.HOUR_OF_DAY, 23)
+    calendar.set(Calendar.MINUTE, 59)
+    calendar.set(Calendar.SECOND, 59)
+    calendar.set(Calendar.MILLISECOND, 999)
+    return calendar.time
 }
 
 fun Date.asString(format: DateFormat): String = format.format(this)
