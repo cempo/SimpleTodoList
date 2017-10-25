@@ -19,7 +19,7 @@ import com.h6ah4i.android.widget.advrecyclerview.touchguard.RecyclerViewTouchAct
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils
 import com.makeevapps.simpletodolist.R
 import com.makeevapps.simpletodolist.databinding.FragmentTodayBinding
-import com.makeevapps.simpletodolist.dataproviders.TaskDataProvider.ConcreteData
+import com.makeevapps.simpletodolist.dataproviders.TaskDataProvider.TaskData
 import com.makeevapps.simpletodolist.datasource.db.table.Task
 import com.makeevapps.simpletodolist.interfaces.RecycleViewEventListener
 import com.makeevapps.simpletodolist.ui.activity.EditTaskActivity
@@ -102,12 +102,11 @@ class TodayFragment : Fragment(), RecycleViewEventListener {
         })
     }
 
-    override fun onItemSwipeRight(position: Int, newPosition: Int?, item: ConcreteData) {
+    override fun onItemSwipeRight(position: Int, newPosition: Int?, item: TaskData) {
         Snackbar.make(binding.coordinatorLayout, R.string.task_is_done, Snackbar.LENGTH_LONG)
                 .setAction(R.string.undo, {
-                    adapter.onUndoTaskStatus(position, newPosition, onSuccess = { task ->
-                        model.insertOrUpdateTask(task)
-                    })
+                    item.task.switchDoneState()
+                    model.insertOrUpdateTask(item.task)
                 }).show()
 
         model.insertOrUpdateTask(item.task)
@@ -118,17 +117,17 @@ class TodayFragment : Fragment(), RecycleViewEventListener {
     }
 
     private fun showDateTimeDialog(position: Int) {
-        val item = adapter.dataProvider.getItem(position) as ConcreteData
+        val item = adapter.dataProvider.getItem(position) as TaskData
         val task = item.task
         val dateTimePicker = DateTimePickerDialog(task.dueDate, task.allDay, onDateSelected = { date, allDay ->
+
             task.allDay = allDay
             task.dueDate = date
-
-            adapter.unPinGroupItem(position, item)
+            item.isPinned = false
 
             model.insertOrUpdateTask(task)
         }, onCanceled = {
-            adapter.unPinGroupItem(position, item)
+            item.isPinned = false
             adapter.notifyDataSetChanged()
         })
         dateTimePicker.show(fragmentManager, "DateTimePickerDialog")

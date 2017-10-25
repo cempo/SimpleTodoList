@@ -1,5 +1,4 @@
 <resources>
-
     <!-- Base application theme. -->
     <style name="BaseAppTheme" parent="Theme.AppCompat.Light">
         <item name="windowActionBar">false</item>
@@ -11,13 +10,11 @@
         <item name="android:windowAnimationStyle">@style/ActivityAnimation</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
-
         <!-- Colors -->
         <item name="android:textColorPrimary">?textColorPrimary</item>
         <item name="android:textColorSecondary">?textColorSecondary</item>
         <item name="android:textColorPrimaryInverse">?textColorPrimaryInverse</item>
         <item name="android:textColorSecondaryInverse">?textColorSecondaryInverse</item>
-
         <!-- Custom -->
     </style>
 
@@ -45,13 +42,11 @@
         <item name="colorPrimaryDark">#0077c2</item>
         <item name="colorPrimaryLight">#80d6ff</item>
         <item name="colorAccent">#66bb6a</item>
-
         <item name="textColorPrimary">#212121</item>
         <item name="textColorSecondary">#757575</item>
         <item name="textColorPrimaryInverse">#e1e7ef</item>
         <item name="textColorSecondaryInverse">#9E9E9E</item>
         <item name="textColorExpiredTask">#e53935</item>
-
         <item name="android:divider">#BDBDBD</item>
         <item name="android:statusBarColor">#0077c2</item>
         <item name="android:navigationBarColor">#42a5f5</item>
@@ -75,8 +70,6 @@
         <item name="colorPrimaryDark">#b61827</item>
         <item name="colorAccent">#ffc107</item>
     </style>
-
-
     <!-- Toolbar -->
     <style name="ToolbarStyle" parent="Widget.AppCompat.Toolbar">
         <item name="android:layout_height">?attr/actionBarSize</item>
@@ -133,7 +126,7 @@
 
     <style name="TodayTaskItemContentStyle">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:orientation">horizontal</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:background">@drawable/bg_today_item_normal_state</item>
@@ -168,7 +161,6 @@
         <item name="android:layout_margin">5dp</item>
         <item name="android:gravity">center</item>
     </style>
-
     <!-- Task Details -->
     <style name="TaskTitleEditTextStyle" parent="Widget.AppCompat.EditText">
         <item name="android:textAppearance">@style/TextAppearance.TaskDetails.Title</item>
@@ -181,6 +173,7 @@
         <item name="android:backgroundTint">?toolbarEditTextLineColor</item>
         <item name="android:textCursorDrawable">@null</item>
     </style>
+
     <style name="TaskDescriptionEditTextStyle">
         <item name="android:textAppearance">@style/TextAppearance.TaskDetails.Title</item>
         <item name="android:layout_width">match_parent</item>
@@ -190,6 +183,7 @@
         <item name="android:layout_marginBottom">10dp</item>
         <item name="android:hint">@string/task_name</item>
     </style>
+
     <style name="TaskDetailDividerStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1px</item>
@@ -197,6 +191,7 @@
         <item name="android:layout_marginEnd">10dp</item>
         <item name="android:background">?android:divider</item>
     </style>
+
     <style name="DetailItemLayoutStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -207,18 +202,21 @@
         <item name="android:paddingBottom">14dp</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
     </style>
+
     <style name="DetailItemIconStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginEnd">10dp</item>
         <item name="android:tint">?android:textColorSecondary</item>
     </style>
+
     <style name="DetailItemTextStyle">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:tint">?android:textColorSecondary</item>
     </style>
+
     <style name="DetailSubTaskItemStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -226,12 +224,14 @@
         <item name="android:paddingStart">7dp</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
     </style>
+
     <style name="DetailSubTaskCheckBoxStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">0dp</item>
         <item name="android:layout_marginEnd">7dp</item>
     </style>
+
     <style name="DetailSubTaskItemTitleStyle">
         <item name="android:textAppearance">@style/TextAppearance.ListItem.SubTasks.Title</item>
         <item name="android:layout_width">match_parent</item>

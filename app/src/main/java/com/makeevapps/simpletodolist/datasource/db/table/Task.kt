@@ -87,6 +87,21 @@ class Task() {
         return dueDate != null && dueDate!! > startDayDate && dueDate!! <= endDayDate
     }
 
+    fun switchDoneState(){
+        if (isDone()) {
+            isComplete = false
+            doneDate = null
+        } else {
+            isComplete = true
+            doneDate = DateUtils.currentTime()
+        }
+    }
+
+    fun markAsDone(){
+        isComplete = true
+        doneDate = DateUtils.currentTime()
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

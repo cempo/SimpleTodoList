@@ -1,24 +1,18 @@
 package com.makeevapps.simpletodolist.dataproviders
 
-import com.h6ah4i.android.widget.advrecyclerview.expandable.RecyclerViewExpandableItemManager
 import com.makeevapps.simpletodolist.datasource.db.table.Task
 import java.math.BigInteger
 import java.util.*
 
 class TaskDataProvider : AbstractDataProvider() {
-    private var data: MutableList<ConcreteData> = LinkedList()
-    private var lastRemovedData: ConcreteData? = null
-    private var lastRemovedPosition = -1
-
-    private var lastMovedFromPosition = -1
-    private var lastMovedToPosition = -1
+    private var data: MutableList<TaskData> = LinkedList()
 
     fun setData(tasks: List<Task>) {
         clearData()
         (0 until tasks.size)
                 .mapTo(data) {
                     val task = tasks[it]
-                    ConcreteData(prepareId(task.id.hashCode()), task)
+                    TaskData(prepareId(task.id.hashCode()), task)
                 }
                 .sortWith(taskComparator)
     }
@@ -29,17 +23,11 @@ class TaskDataProvider : AbstractDataProvider() {
     }
 
     fun clearData() {
-        lastRemovedData = null
-        lastRemovedPosition = -1
-
-        lastMovedFromPosition = -1
-        lastMovedToPosition = -1
-
         data.clear()
     }
 
 
-    private val taskComparator = compareBy<ConcreteData> { it.task.isComplete }
+    private val taskComparator = compareBy<TaskData> { it.task.isComplete }
             .thenByDescending { it.task.doneDate }
             .thenBy { it.task.dueDate }
             .thenByDescending { it.task.priority.typeId }
@@ -56,103 +44,31 @@ class TaskDataProvider : AbstractDataProvider() {
         return data[index]
     }
 
-    fun getValidPosition(concreteData: ConcreteData): Int? {
+    fun getValidPosition(taskData: TaskData): Int? {
         var toPosition: Int? = null
 
-        val task = concreteData.task
+        val task = taskData.task
         if ((task.isPlanedForToday() || task.isNotPlaned() || task.isExpiredForCurrentTime() || task.isDone()) &&
                 !task.isExpiredBeforeToday()) {
             val tempDataList = LinkedList(data)
 
-            if (!tempDataList.contains(concreteData)) {
-                tempDataList.add(concreteData)
+            if (!tempDataList.contains(taskData)) {
+                tempDataList.add(taskData)
             }
             val dataList = tempDataList.sortedWith(taskComparator)
 
-            toPosition = dataList.indexOf(concreteData)
+            toPosition = dataList.indexOf(taskData)
         }
 
         return toPosition
     }
 
-    override fun undoLastRemoval(): Int {
-        if (lastRemovedData != null) {
-            val insertedData = lastRemovedData!!
-            val insertedPosition: Int = if (lastRemovedPosition >= 0 && lastRemovedPosition < data.size) {
-                lastRemovedPosition
-            } else {
-                data.size
-            }
-
-            data.add(insertedPosition, insertedData)
-
-            lastRemovedData = null
-            lastRemovedPosition = -1
-
-            return insertedPosition
-        } else {
-            return -1
-        }
-    }
-
-    fun undoLastMovement(): Long {
-        val insertedPosition = if (lastMovedFromPosition >= 0 && lastMovedFromPosition < data.size) {
-            lastMovedFromPosition
-        } else {
-            data.size
-        }
-
-        if (lastMovedToPosition != -1) {
-            val itemData = data.removeAt(lastMovedToPosition)
-            data.add(insertedPosition, itemData)
-        }
-
-        lastMovedToPosition = -1
-        lastMovedFromPosition = -1
-
-        return RecyclerViewExpandableItemManager.getPackedPositionForGroup(insertedPosition)
-    }
-
-    override fun moveItem(fromPosition: Int, toPosition: Int) {
-        if (fromPosition == toPosition) {
-            return
-        }
-
-        val lastMovedData = data.removeAt(fromPosition)
-        lastMovedFromPosition = fromPosition
-        lastMovedToPosition = toPosition
-
-        data.add(toPosition, lastMovedData)
-        lastRemovedPosition = -1
-    }
-
-    override fun swapItem(fromPosition: Int, toPosition: Int) {
-        if (fromPosition == toPosition) {
-            return
-        }
-
-        Collections.swap(data, toPosition, fromPosition)
-        lastRemovedPosition = -1
-    }
-
-    override fun removeItem(position: Int) {
-
-        val removedItem = data.removeAt(position)
-
-        lastRemovedData = removedItem
-        lastRemovedPosition = position
-    }
-
-    class ConcreteData internal constructor(override val id: Long, override val task: Task) :
+    class TaskData internal constructor(override val id: Long, override val task: Task) :
             AbstractDataProvider.Data() {
 
         override var isPinned: Boolean = false
         override val isSectionHeader = false
 
         override fun toString(): String = task.title
-    }
-
-    init {
-        data = LinkedList()
     }
 }

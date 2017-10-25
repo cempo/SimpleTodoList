@@ -4,7 +4,7 @@ import android.view.View
 import com.makeevapps.simpletodolist.dataproviders.TaskDataProvider
 
 interface RecycleViewEventListener {
-    fun onItemSwipeRight(position: Int, newPosition: Int?, item: TaskDataProvider.ConcreteData)
+    fun onItemSwipeRight(position: Int, newPosition: Int?, item: TaskDataProvider.TaskData)
 
     fun onItemSwipeLeft(position: Int)
 

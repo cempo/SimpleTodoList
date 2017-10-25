@@ -18,11 +18,4 @@ abstract class AbstractDataProvider {
 
     abstract fun getItem(index: Int): Data
 
-    abstract fun removeItem(position: Int)
-
-    abstract fun moveItem(fromPosition: Int, toPosition: Int)
-
-    abstract fun swapItem(fromPosition: Int, toPosition: Int)
-
-    abstract fun undoLastRemoval(): Int
 }

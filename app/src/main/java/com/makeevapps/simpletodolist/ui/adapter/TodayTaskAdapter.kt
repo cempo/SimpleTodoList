@@ -220,73 +220,24 @@ class TodayTaskAdapter(val context: Context,
 
     private class SwipeRightResultAction internal constructor(private var adapter: TodayTaskAdapter?,
                                                               private val position: Int) : SwipeResultActionRemoveItem() {
-        private var item = adapter!!.dataProvider.getItem(position) as TaskDataProvider.ConcreteData
+        private var item = adapter!!.dataProvider.getItem(position) as TaskDataProvider.TaskData
         private var newPosition: Int? = null
 
         override fun onPerformAction() {
             super.onPerformAction()
 
-            val task = item.task
-            if (task.isComplete) {
-                task.isComplete = false
-                task.doneDate = null
-            } else {
-                task.isComplete = true
-                task.doneDate = DateUtils.currentTime()
-            }
-
-            val toPosition = adapter!!.dataProvider.getValidPosition(item)
-            newPosition = toPosition
-
-            if (toPosition != null) {
-                adapter!!.dataProvider.moveItem(position, toPosition)
-            } else {
-                adapter!!.dataProvider.removeItem(position)
-            }
+            item.task.switchDoneState()
         }
 
         override fun onSlideAnimationEnd() {
             super.onSlideAnimationEnd()
 
-            adapter!!.eventListener.onItemSwipeRight(position, newPosition, item)
+            adapter?.eventListener?.onItemSwipeRight(position, newPosition, item)
         }
 
         override fun onCleanUp() {
             super.onCleanUp()
             adapter = null
-        }
-    }
-
-    fun onUndoTaskStatus(position: Int, newPosition: Int?, onSuccess: (task: Task) -> Unit) {
-        if (newPosition != null) {
-            dataProvider.undoLastMovement()
-        } else {
-            dataProvider.undoLastRemoval()
-        }
-
-        val itemData = dataProvider.getItem(position)
-        val task = itemData.task
-        if (task.isComplete) {
-            task.isComplete = false
-            task.doneDate = null
-        } else {
-            task.isComplete = true
-            task.doneDate = DateUtils.currentTime()
-        }
-
-        onSuccess(task)
-    }
-
-    fun unPinGroupItem(fromPosition: Int, item: TaskDataProvider.ConcreteData) {
-        item.isPinned = false
-
-        val newPosition = dataProvider.getValidPosition(item)
-        if (newPosition != null) {
-            if (fromPosition != newPosition) {
-                dataProvider.moveItem(fromPosition, newPosition)
-            }
-        } else {
-            dataProvider.removeItem(fromPosition)
         }
     }
 }
