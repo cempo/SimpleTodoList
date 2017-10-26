@@ -21,7 +21,7 @@ object EditSubTaskDialog {
 
         val builder = MaterialDialog.Builder(context)
                 .title(if (subTask != null) R.string.change_sub_task else R.string.add_sub_task)
-                .inputRangeRes(2, 60, R.color.colorAccent)
+                .inputRangeRes(1, 60, R.color.color_primary_light)
                 .input(null, subTask?.title ?: "", { dialog, input ->
                     if (subTask != null) {
                         subTask.title = input.toString()

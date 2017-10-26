@@ -113,6 +113,13 @@ class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener, CheckBoxC
         dateTimePicker.show(supportFragmentManager, "DateTimePickerDialog")
     }
 
+    fun onRemoveDateButtonClick(view: View?) {
+        model.newTask.allDay = true
+        model.newTask.dueDate = null
+
+        binding.task = model.newTask
+    }
+
     fun changeTaskPriority(view: View?) {
         EditTaskPriorityDialog.showDialog(this, model.newTask.priority, onSuccess = { priority ->
             model.newTask.priority = priority

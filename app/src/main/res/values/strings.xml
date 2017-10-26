@@ -57,4 +57,11 @@
     <string name="add_sub_task">Add Sub task</string>
     <string name="all_day">All day</string>
     <string name="date_in_the_past">You can\'t use time in the past</string>
+
+    <!-- Settings -->
+    <string name="application">Application</string>
+    <string name="theme">Theme</string>
+    <string name="other">Other</string>
+    <string name="about">About</string>
+    <string name="app_version">Version: %s</string>
 </resources>

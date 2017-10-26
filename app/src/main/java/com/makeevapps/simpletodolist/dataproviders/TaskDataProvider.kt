@@ -31,7 +31,6 @@ class TaskDataProvider : AbstractDataProvider() {
             .thenByDescending { it.task.doneDate }
             .thenBy { it.task.dueDate }
             .thenByDescending { it.task.priority.typeId }
-            .thenBy { it.task.allDay }
             .thenBy { it.task.title }
 
     override fun getCount() = data.size

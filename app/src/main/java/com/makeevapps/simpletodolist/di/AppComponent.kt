@@ -20,6 +20,7 @@ interface AppComponent {
     fun inject(viewModel: EditTaskViewModel)
     fun inject(viewModel: SnoozeViewModel)
     fun inject(viewModel: SettingsViewModel)
+    fun inject(viewModel: AboutViewModel)
 
     fun inject(receiver: ReminderReceiver)
     fun inject(receiver: NotificationReceiver)

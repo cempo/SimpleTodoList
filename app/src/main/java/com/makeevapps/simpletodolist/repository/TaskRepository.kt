@@ -44,65 +44,7 @@ class TaskRepository(val taskDao: TaskDao, val alarmScheduler: AlarmScheduler) {
         return taskDao.getTasksByDate(startDay, endDay)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-        //.doOnSubscribe(s -> loadingStatus.setValue(true))
-        //.doAfterTerminate(() -> loadingStatus.setValue(false))
     }
-
-    /*fun getTodayTasks(): Flowable<List<Task>> {
-        val startDay = DateUtils.startCurrentDayDate()
-        val endDay = DateUtils.endCurrentDayDate()
-        val currentTime = DateUtils.currentTime()
-        return taskDao.loadAll()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                //.map { Result.success(it) }
-    }*/
-
-    /*Work with update*/
-    /*fun getTodayTasks(): Flowable<List<Task>> {
-        return Flowable.create({ emitter ->
-            val startDay = DateUtils.startCurrentDayDate()
-            val endDay = DateUtils.endCurrentDayDate()
-
-            taskDao.loadForTodayScreen(startDay, endDay)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { parentTaskList ->
-                        val parentsTaskIds: List<String> = parentTaskList
-                                .filter { !it.id.isEmpty() }
-                                .map { it.id }
-
-                        taskDao.loadSubTasks(parentsTaskIds).subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe { childTaskList ->
-
-                                    for (parentTask in parentTaskList) {
-                                        childTaskList
-                                                .filter { parentTask.id == it.parentId }
-                                                .forEach { parentTask.subTasks.add(it) }
-                                    }
-
-                                    emitter.onNext(parentTaskList)
-                                }
-                    }
-        }, BackpressureStrategy.BUFFER)
-    }*/
-
-    /*fun getTodayTasks2(): Flowable<Result<List<Task>>> {
-        return Flowable.create({ emitter ->
-            val startDay = DateUtils.startCurrentDayDate()
-            val endDay = DateUtils.endCurrentDayDate()
-            taskDao.getTasksByDate(startDay, endDay)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .map { Result.success(it) }
-                    .subscribe({
-                        emitter.onNext(it)
-                        //emitter.onComplete()
-                    })
-
-        }, BackpressureStrategy.BUFFER)
-    }*/
 
     fun getTaskById(taskId: String): Flowable<Task> {
         return taskDao.loadById(taskId)
@@ -130,7 +72,7 @@ class TaskRepository(val taskDao: TaskDao, val alarmScheduler: AlarmScheduler) {
         return Completable.fromCallable({
             taskDao.insert(task)
 
-            if (!task.isComplete && task.dueDate != null) {
+            if (!task.isComplete && task.dueDate != null && task.dueDate!!.after(DateUtils.currentTime())) {
                 alarmScheduler.scheduleAlarm(task.dueDate!!.time, task.id)
             } else {
                 alarmScheduler.removeAlarm(task.id)

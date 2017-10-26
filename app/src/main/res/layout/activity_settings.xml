@@ -9,19 +9,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <include
-            android:id="@+id/toolbar_include"
-            layout="@layout/toolbar"/>
-        <LinearLayout
+        <include layout="@layout/toolbar"/>
+        <fragment
+            android:id="@+id/settingsFragment"
+            android:name="com.makeevapps.simpletodolist.ui.fragment.SettingsFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center">
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/app_name"
-                android:onClick="@{controller.changeThemeButton}"/>
-        </LinearLayout>
+            android:layout_height="match_parent"/>
     </LinearLayout>
 </layout>

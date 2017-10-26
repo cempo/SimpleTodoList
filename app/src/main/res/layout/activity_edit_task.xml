@@ -60,6 +60,11 @@
                         style="@style/DetailItemTextStyle"
                         android:text="@{controller.getDueDate(task)}"
                         android:onClick="@{controller.onDateTimeButtonClick}"/>
+                    <ImageView
+                        style="@style/DetailItemIconStyle"
+                        android:src="@drawable/ic_close_black_24dp"
+                        android:onClick="@{controller.onRemoveDateButtonClick}"
+                        android:visibility="@{task == null || task.dueDate == null ? View.GONE : View.VISIBLE}"/>
                 </LinearLayout>
                 <View style="@style/TaskDetailDividerStyle"/>
                 <LinearLayout

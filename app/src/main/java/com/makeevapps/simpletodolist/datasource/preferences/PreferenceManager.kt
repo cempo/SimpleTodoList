@@ -3,19 +3,14 @@ package com.makeevapps.simpletodolist.datasource.preferences
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import com.makeevapps.simpletodolist.R
 import com.makeevapps.simpletodolist.enums.ThemeStyle
 
 
-class PreferenceManager(context: Context) : IDataManager {
-    companion object {
-        val THEME_ID = "theme_id"
-    }
-
+class PreferenceManager(val context: Context) : IDataManager {
     private var manager: SharedPreferences
 
     init {
-        println("This ($this) is a singleton")
-
         manager = PreferenceManager.getDefaultSharedPreferences(context)
     }
 
@@ -23,11 +18,11 @@ class PreferenceManager(context: Context) : IDataManager {
         this.manager = manager
     }
 
-    override fun getThemeId(): Int {
-        return manager.getInt(THEME_ID, ThemeStyle.defaultValue().id)
+    override fun getThemeId(): String {
+        return manager.getString(context.getString(R.string.themeId), ThemeStyle.defaultValue().id)
     }
 
-    override fun setThemeId(id: Int) {
-        manager.edit().putInt(THEME_ID, id).apply()
+    override fun setThemeId(id: String) {
+        manager.edit().putString(context.getString(R.string.themeId), id).apply()
     }
 }

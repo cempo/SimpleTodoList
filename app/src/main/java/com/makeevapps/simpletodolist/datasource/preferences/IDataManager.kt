@@ -2,8 +2,8 @@ package com.makeevapps.simpletodolist.datasource.preferences
 
 interface IDataManager {
 
-    fun getThemeId(): Int
+    fun getThemeId(): String
 
-    fun setThemeId(id: Int)
+    fun setThemeId(id: String)
 
 }

@@ -10,6 +10,7 @@
         <item name="android:windowAnimationStyle">@style/ActivityAnimation</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <!-- Colors -->
         <item name="android:textColorPrimary">?textColorPrimary</item>
         <item name="android:textColorSecondary">?textColorSecondary</item>
