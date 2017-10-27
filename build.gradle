@@ -4,12 +4,12 @@ buildscript {
         versionName = "1.0"
 
         compileSdkVersion = 26
-        buildToolsVersion = '26.0.1'
+        buildToolsVersion = '26.0.2'
         targetSdkVersion = 25
-        supportVersion = '26.1.0'
+        supportVersion = '27.0.0'
         playServicesVersion = '11.0.4'
         kotlinVersion = '1.1.51'
-        architectureVersion = '1.0.0-alpha9'
+        architectureVersion = '1.0.0-rc1'
         daggerVersion = '2.11'
     }
 
@@ -28,7 +28,7 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
-        maven { url 'https://maven.google.com' }
+        google()
         maven { url "https://jitpack.io" }
     }
 }

@@ -31,9 +31,9 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClic
             getString(R.string.themeId) -> {
                 model.saveThemeId(newValue.toString())
 
-                TaskStackBuilder.create(activity)
-                        .addNextIntent(MainActivity.getActivityIntent(activity, false))
-                        .addNextIntent(SettingsActivity.getActivityIntent(activity))
+                TaskStackBuilder.create(context!!)
+                        .addNextIntent(MainActivity.getActivityIntent(context!!, false))
+                        .addNextIntent(SettingsActivity.getActivityIntent(context!!))
                         .startActivities()
             }
         }
@@ -43,7 +43,7 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClic
     override fun onPreferenceClick(preference: Preference?): Boolean {
         when (preference?.key) {
             getString(R.string.aboutScreen) -> {
-                startActivity(AboutActivity.getActivityIntent(activity))
+                startActivity(AboutActivity.getActivityIntent(context!!))
             }
         }
         return false

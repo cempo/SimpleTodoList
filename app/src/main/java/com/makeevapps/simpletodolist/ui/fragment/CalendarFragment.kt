@@ -54,8 +54,7 @@ class CalendarFragment : Fragment(), RecycleViewEventListener {
         model = ViewModelProviders.of(this).get(CalendarViewModel::class.java)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_calendar, container, false)
         binding.controller = this
         binding.model = model
@@ -63,7 +62,7 @@ class CalendarFragment : Fragment(), RecycleViewEventListener {
         return binding.root
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val activity = activity as MainActivity
@@ -100,7 +99,7 @@ class CalendarFragment : Fragment(), RecycleViewEventListener {
         touchActionGuardManager.setInterceptVerticalScrollingWhileAnimationRunning(true)
         touchActionGuardManager.isEnabled = true
 
-        adapter = TodayTaskAdapter(context, this)
+        adapter = TodayTaskAdapter(context!!, this)
         wrappedAdapter = swipeManager.createWrappedAdapter(adapter)
 
         val animator = SwipeDismissItemAnimator()
@@ -110,7 +109,8 @@ class CalendarFragment : Fragment(), RecycleViewEventListener {
         binding.recyclerView.adapter = wrappedAdapter
         binding.recyclerView.itemAnimator = animator
         binding.recyclerView.setHasFixedSize(false)
-        binding.recyclerView.addItemDecoration(SimpleListDividerDecorator(ContextCompat.getDrawable(context, R.drawable.divider), true))
+        binding.recyclerView.addItemDecoration(SimpleListDividerDecorator(ContextCompat.getDrawable(context!!, R
+                .drawable.divider), true))
 
         touchActionGuardManager.attachRecyclerView(binding.recyclerView)
         swipeManager.attachRecyclerView(binding.recyclerView)
@@ -162,11 +162,11 @@ class CalendarFragment : Fragment(), RecycleViewEventListener {
 
     override fun onItemClicked(v: View?, position: Int) {
         val item = adapter.dataProvider.getItem(position)
-        activity.startActivity(EditTaskActivity.getActivityIntent(activity, item.task.id))
+        startActivity(EditTaskActivity.getActivityIntent(context!!, item.task.id))
     }
 
     fun onAddButtonClick(view: View?) {
-        activity.startActivity(EditTaskActivity.getActivityIntent(activity, null, horizontalCalendar.selectedDate))
+        startActivity(EditTaskActivity.getActivityIntent(context!!, null, horizontalCalendar.selectedDate))
     }
 
     private fun releaseRecyclerView() {
