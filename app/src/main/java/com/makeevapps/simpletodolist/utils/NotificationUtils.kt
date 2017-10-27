@@ -42,6 +42,7 @@ class NotificationUtils {
                 .setContentIntent(contentPendingIntent)
                 .addAction(R.drawable.ic_notification_change_time, context.getString(R.string.snooze), snoozePendingIntent)
                 .addAction(R.drawable.ic_notification_done, context.getString(R.string.done), donePendingIntent)
+                .setSound(DEFAULT_SOUND_URI)
                 .build()
 
         showNotification(context, TASK_NOTIFICATION_ID, notification)
@@ -61,6 +62,7 @@ class NotificationUtils {
                 .setAutoCancel(false)
                 .setOngoing(true)
                 .setContentIntent(contentPendingIntent)
+                .setSound(DEFAULT_SOUND_URI)
                 .build()
 
         showNotification(context, ADD_TASK_NOTIFICATION_ID, notification)

@@ -4,7 +4,8 @@ import com.makeevapps.simpletodolist.R
 
 enum class ThemeStyle constructor(val id: String, val themeResId: Int) {
     THEME_1("1", R.style.AppTheme1),
-    THEME_2("2", R.style.AppTheme2);
+    THEME_2("2", R.style.AppTheme2),
+    THEME_3("3", R.style.AppTheme3);
 
     companion object {
         fun getThemeById(id: String): ThemeStyle {

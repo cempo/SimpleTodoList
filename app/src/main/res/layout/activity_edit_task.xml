@@ -85,6 +85,7 @@
                     <View
                         android:id="@+id/priorityColorView"
                         android:layout_marginStart="10dp"
+                        android:layout_marginEnd="6dp"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:background="@{task != null ? ContextCompat.getColor(context, task.priority.colorResId) : ContextCompat.getColor(context, TaskPriority.NONE.colorResId)}"

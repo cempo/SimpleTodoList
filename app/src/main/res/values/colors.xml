@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="status_bar">#0077c2</color>
-    <color name="materialize_primary_dark">#0077c2</color>
-
     <!-- Today list -->
     <color name="bg_swipe_done_item_right">#9E9E9E</color>
     <color name="bg_swipe_todo_item_right">#ff2f8b2a</color>

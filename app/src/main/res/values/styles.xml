@@ -16,6 +16,15 @@
         <item name="android:textColorSecondary">?textColorSecondary</item>
         <item name="android:textColorPrimaryInverse">?textColorPrimaryInverse</item>
         <item name="android:textColorSecondaryInverse">?textColorSecondaryInverse</item>
+        <item name="android:statusBarColor">?colorPrimaryDark</item>
+        <item name="android:navigationBarColor">?colorPrimary</item>
+        <!-- Drawer -->
+        <item name="material_drawer_background">@color/material_drawer_background</item>
+        <item name="material_drawer_primary_text">?android:textColorPrimary</item>
+        <item name="material_drawer_secondary_text">?android:textColorSecondary</item>
+        <item name="material_drawer_primary_icon">?android:textColorSecondary</item>
+        <!--<item name="material_drawer_selected">@color/material_drawer_selected</item>-->
+        <item name="material_drawer_selected_text">?colorPrimary</item>
         <!-- Custom -->
     </style>
 
@@ -43,21 +52,14 @@
         <item name="colorPrimaryDark">#0077c2</item>
         <item name="colorPrimaryLight">#80d6ff</item>
         <item name="colorAccent">#66bb6a</item>
+
         <item name="textColorPrimary">#212121</item>
         <item name="textColorSecondary">#757575</item>
         <item name="textColorPrimaryInverse">#e1e7ef</item>
         <item name="textColorSecondaryInverse">#9E9E9E</item>
         <item name="textColorExpiredTask">#e53935</item>
         <item name="android:divider">#BDBDBD</item>
-        <item name="android:statusBarColor">#0077c2</item>
-        <item name="android:navigationBarColor">#42a5f5</item>
-        <!-- Drawer -->
-        <item name="material_drawer_background">@color/material_drawer_background</item>
-        <item name="material_drawer_primary_text">?android:textColorPrimary</item>
-        <item name="material_drawer_secondary_text">?android:textColorSecondary</item>
-        <item name="material_drawer_primary_icon">?android:textColorSecondary</item>
-        <!--<item name="material_drawer_selected">@color/material_drawer_selected</item>
-        <item name="material_drawer_selected_text">@color/material_drawer_selected_text</item>-->
+
         <!-- Custom -->
         <item name="toolbarIconColor">#ffffff</item>
         <item name="toolbarTitleColor">#ffffff</item>
@@ -69,7 +71,15 @@
     <style name="AppTheme2" parent="AppTheme1">
         <item name="colorPrimary">#ef5350</item>
         <item name="colorPrimaryDark">#b61827</item>
-        <item name="colorAccent">#ffc107</item>
+        <item name="colorPrimaryLight">#ff867c</item>
+        <item name="colorAccent">#f49c03</item>
+    </style>
+
+    <style name="AppTheme3" parent="AppTheme1">
+        <item name="colorPrimary">#4caf50</item>
+        <item name="colorPrimaryDark">#087f23</item>
+        <item name="colorPrimaryLight">#80e27e</item>
+        <item name="colorAccent">#ef5350</item>
     </style>
     <!-- Toolbar -->
     <style name="ToolbarStyle" parent="Widget.AppCompat.Toolbar">

@@ -132,7 +132,7 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
-        var outState = drawer.saveInstanceState(outState)
+        val outState = drawer.saveInstanceState(outState)
         super.onSaveInstanceState(outState)
     }
 
