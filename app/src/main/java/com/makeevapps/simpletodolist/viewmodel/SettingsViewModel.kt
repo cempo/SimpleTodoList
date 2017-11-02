@@ -14,9 +14,11 @@ class SettingsViewModel : ViewModel() {
         App.component.inject(this)
     }
 
-    fun getThemeResId(): Int = ThemeStyle.getThemeById(preferenceManager.getThemeId()).themeResId
-
     fun saveThemeId(themeId: String) {
         preferenceManager.setThemeId(themeId)
+    }
+
+    fun saveIs24HourFormat(is24: Boolean) {
+        preferenceManager.setIs24HourFormat(is24)
     }
 }

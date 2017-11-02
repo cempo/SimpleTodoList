@@ -27,6 +27,10 @@
             android:name=".ui.activity.SnoozeActivity"
             android:windowSoftInputMode="adjustResize"
             android:theme="@style/TransparentTheme"/>
+        <activity
+            android:name=".ui.activity.DateTimeChooserActivity"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/TransparentTheme"/>
         <activity android:name=".ui.activity.SettingsActivity"/>
         <activity android:name=".ui.activity.AboutActivity"/>
         <!-- Services -->

@@ -1,5 +1,6 @@
 package com.makeevapps.simpletodolist.ui.activity
 
+import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
@@ -8,41 +9,49 @@ import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.makeevapps.simpletodolist.Keys.KEY_POSITION
+import com.makeevapps.simpletodolist.Keys.KEY_TASK_ID
 import com.makeevapps.simpletodolist.R
 import com.makeevapps.simpletodolist.databinding.ActivitySnoozeBinding
 import com.makeevapps.simpletodolist.datasource.db.table.Task
-import com.makeevapps.simpletodolist.ui.dialog.DateTimePickerDialog
 import com.makeevapps.simpletodolist.viewmodel.SnoozeViewModel
-import com.orhanobut.logger.Logger
 
 class SnoozeActivity : AppCompatActivity() {
-    lateinit var model: SnoozeViewModel
-    lateinit var binding: ActivitySnoozeBinding
-
     companion object {
-        fun getActivityIntent(context: Context, taskId: String): Intent {
+        val SNOOZE_DATE_REQUEST_CODE = 444
+
+        fun getActivityIntent(context: Context, taskId: String, newTask: Boolean, position: Int? = null): Intent {
             val intent = Intent(context, SnoozeActivity::class.java)
-            intent.flags = FLAG_ACTIVITY_NEW_TASK
-            intent.putExtra("taskId", taskId)
+            if (newTask) {
+                intent.flags = FLAG_ACTIVITY_NEW_TASK
+            }
+            intent.putExtra(KEY_TASK_ID, taskId)
+            intent.putExtra(KEY_POSITION, position)
             return intent
         }
     }
 
+    val model: SnoozeViewModel by lazy {
+        ViewModelProviders.of(this).get(SnoozeViewModel::class.java)
+    }
+
+    val binding: ActivitySnoozeBinding by lazy {
+        DataBindingUtil.setContentView<ActivitySnoozeBinding>(this, R.layout.activity_snooze)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        model = ViewModelProviders.of(this).get(SnoozeViewModel::class.java)
         super.onCreate(savedInstanceState)
 
         title = ""
 
-        val taskId = intent.extras.getString("taskId")
+        model.initTask(intent.extras)
 
-        model.loadTask(taskId)
-
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_snooze)
         binding.controller = this
         binding.model = model
 
-        observeTaskResponse()
+        if (savedInstanceState == null) {
+            observeTaskResponse()
+        }
     }
 
     private fun observeTaskResponse() {
@@ -55,21 +64,29 @@ class SnoozeActivity : AppCompatActivity() {
         })
     }
 
-    fun showDateTimePicker() {
+    private fun showDateTimePicker() {
+        val dueDate = model.task.dueDate
         val isAllDay = model.task.allDay
-        val currentDate = model.task.dueDate
 
-        val dateTimePicker = DateTimePickerDialog(currentDate, isAllDay, onDateSelected = { date, allDay ->
+        startActivityForResult(DateTimeChooserActivity.getActivityIntent(this, dueDate, isAllDay),
+                DateTimeChooserActivity.CHOOSE_DATE_REQUEST_CODE)
+    }
 
-            model.task.allDay = allDay
-            model.task.dueDate = date
-
-            model.insertOrUpdateTask(onSuccess = {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == DateTimeChooserActivity.CHOOSE_DATE_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                data?.let {
+                    model.updateDueDate(it.extras)
+                    model.insertOrUpdateTask(onSuccess = {
+                        setResult(Activity.RESULT_OK, model.resultIntent())
+                        finish()
+                    })
+                }
+            } else {
+                setResult(Activity.RESULT_CANCELED, model.resultIntent())
                 finish()
-            })
-        }, onCanceled = {
-            finish()
-        })
-        dateTimePicker.show(supportFragmentManager, "DateTimePickerDialog")
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 }

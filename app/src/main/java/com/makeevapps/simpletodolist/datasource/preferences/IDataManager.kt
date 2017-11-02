@@ -6,4 +6,8 @@ interface IDataManager {
 
     fun setThemeId(id: String)
 
+    fun is24HourFormat(): Boolean
+
+    fun setIs24HourFormat(is24: Boolean)
+
 }

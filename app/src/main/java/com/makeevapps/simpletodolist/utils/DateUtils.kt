@@ -3,12 +3,16 @@ package com.makeevapps.simpletodolist.utils
 import java.util.*
 
 object DateUtils {
-    const val DATE_TIME_FORMAT = "d MMM HH:mm"
-    const val FULL_DATE_FORMAT = "MMMM-dd-yyyy"
+    const val DATE_TIME_24H_FORMAT = "MMM dd HH:mm"
+    const val DATE_TIME_12H_FORMAT = "MMM dd h:mm a"
+
+    const val FULL_DATE_FORMAT = "MMMM.dd.yyyy"
     const val SHORT_DATE_FORMAT = "MMM d"
-    const val SHORT_DATE_FORMAT2 = "MMM d EEE"
-    const val SHORT_DATE_FORMAT3 = "d MMM"
-    const val TIME_FORMAT = "HH:mm"
+    const val SHORT_DATE_FORMAT2 = "EEE, MMM d"
+    const val SHORT_DATE_FORMAT3 = "MM.dd"
+
+    const val TIME_24H_FORMAT = "HH:mm"
+    const val TIME_12H_FORMAT = "h:mm a"
 
     fun currentTime(): Date = Calendar.getInstance().time
 

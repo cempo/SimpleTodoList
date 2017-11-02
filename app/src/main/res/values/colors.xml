@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="ripple_grey_background">#e5e5e5</color>
+
     <!-- Today list -->
     <color name="bg_swipe_done_item_right">#9E9E9E</color>
     <color name="bg_swipe_todo_item_right">#ff2f8b2a</color>

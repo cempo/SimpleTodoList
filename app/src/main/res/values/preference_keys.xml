@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="themeId" translatable="false">theme_id</string>
+    <string name="is24HourFormat" translatable="false">is24HourFormat</string>
     <string name="aboutScreen" translatable="false">about_screen</string>
 </resources>

@@ -3,7 +3,7 @@
     <data>
         <variable
             name="controller"
-            type="com.makeevapps.simpletodolist.ui.dialog.TimePickerDialog"/>
+            type="com.makeevapps.simpletodolist.ui.dialog.TimePickerCustomDialog"/>
     </data>
     <LinearLayout
         android:layout_width="0dp"
@@ -11,14 +11,14 @@
         android:layout_weight="1"
         android:orientation="horizontal">
         <Button
-            android:id="@+id/time"
+            android:id="@+id/allDay"
             style="@style/mdtp_ActionButton.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_gravity="start|center_vertical"
             android:textColor="?colorAccent"
-            android:text="@string/clear"
-            android:onClick="@{controller.onRemoveTimeClickButton}"/>
+            android:text="@string/all_day"
+            android:onClick="@{controller.onAllDayButtonClick}"/>
     </LinearLayout>
 </layout>

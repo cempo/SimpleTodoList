@@ -7,6 +7,10 @@
             android:entries="@array/themes"
             android:entryValues="@array/themes_values"
             android:defaultValue="1"/>
+        <SwitchPreference
+            android:key="@string/is24HourFormat"
+            android:title="@string/use_24h_format"
+            android:defaultValue="true" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/other">
         <PreferenceScreen

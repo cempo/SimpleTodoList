@@ -18,6 +18,5 @@ class AboutViewModel : ViewModel() {
         App.component.inject(this)
     }
 
-    fun getThemeResId(): Int = ThemeStyle.getThemeById(preferenceManager.getThemeId()).themeResId
-    fun getAppVrsion(): String = BuildConfig.VERSION_NAME
+    fun getAppVersion(): String = BuildConfig.VERSION_NAME
 }

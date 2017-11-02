@@ -24,7 +24,7 @@ import com.makeevapps.simpletodolist.interfaces.RecycleViewEventListener
 import com.makeevapps.simpletodolist.utils.DateUtils
 import com.makeevapps.simpletodolist.utils.extension.asString
 
-class TodayTaskAdapter(val context: Context,
+class TodayTaskAdapter(val context: Context, val is24HoursFormat: Boolean,
                        val eventListener: RecycleViewEventListener) : RecyclerView.Adapter<TodayTaskAdapter.MyViewHolder>(), SwipeableItemAdapter<TodayTaskAdapter.MyViewHolder> {
     var dataProvider = TaskDataProvider()
 
@@ -78,13 +78,16 @@ class TodayTaskAdapter(val context: Context,
 
         val isExpired = item.task.isExpired()
 
-        var dateString: String = when {
+        val dateString: String = when {
             item.task.isDone() -> ""
             isExpired -> item.task.dueDate?.asString(DateUtils.SHORT_DATE_FORMAT) ?: ""
-            item.task.isPlaned() -> if (item.task.allDay) {
-                context.getString(R.string.all_day)
-            } else {
-                item.task.dueDate?.asString(DateUtils.TIME_FORMAT) ?: ""
+            item.task.isPlaned() -> when {
+                item.task.allDay -> context.getString(R.string.all_day)
+                else -> if (is24HoursFormat) {
+                    item.task.dueDate?.asString(DateUtils.TIME_24H_FORMAT) ?: ""
+                } else {
+                    item.task.dueDate?.asString(DateUtils.TIME_12H_FORMAT) ?: ""
+                }
             }
             else -> ""
         }

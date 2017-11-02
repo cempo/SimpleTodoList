@@ -1,5 +1,6 @@
 package com.makeevapps.simpletodolist.ui.activity
 
+import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
@@ -10,53 +11,55 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import com.makeevapps.simpletodolist.Keys.KEY_DUE_DATE_IN_MILLIS
+import com.makeevapps.simpletodolist.Keys.KEY_TASK_ID
 import com.makeevapps.simpletodolist.R
 import com.makeevapps.simpletodolist.databinding.ActivityEditTaskBinding
 import com.makeevapps.simpletodolist.datasource.db.table.Task
+import com.makeevapps.simpletodolist.enums.ThemeStyle
 import com.makeevapps.simpletodolist.interfaces.CheckBoxCheckedListener
 import com.makeevapps.simpletodolist.interfaces.RecycleViewItemClickListener
+import com.makeevapps.simpletodolist.ui.activity.DateTimeChooserActivity.Companion.CHOOSE_DATE_REQUEST_CODE
 import com.makeevapps.simpletodolist.ui.adapter.SubTaskAdapter
 import com.makeevapps.simpletodolist.ui.dialog.CancelChangesDialog
-import com.makeevapps.simpletodolist.ui.dialog.DateTimePickerDialog
 import com.makeevapps.simpletodolist.ui.dialog.EditSubTaskDialog
 import com.makeevapps.simpletodolist.ui.dialog.EditTaskPriorityDialog
-import com.makeevapps.simpletodolist.utils.DateUtils
 import com.makeevapps.simpletodolist.utils.ToastUtils
-import com.makeevapps.simpletodolist.utils.extension.asString
-import com.makeevapps.simpletodolist.utils.extension.endDayDate
+import com.makeevapps.simpletodolist.viewmodel.DateTimeChooserViewModel
 import com.makeevapps.simpletodolist.viewmodel.EditTaskViewModel
-import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.toolbar.*
 import java.util.*
 
 class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener, CheckBoxCheckedListener {
-    lateinit var model: EditTaskViewModel
-    lateinit var binding: ActivityEditTaskBinding
-    lateinit var subTaskAdapter: SubTaskAdapter
+    private lateinit var subTaskAdapter: SubTaskAdapter
 
     companion object {
         fun getActivityIntent(context: Context, taskId: String? = null, dueDate: Date? = null): Intent {
             val intent = Intent(context, EditTaskActivity::class.java)
-            intent.putExtra("taskId", taskId)
+            intent.putExtra(KEY_TASK_ID, taskId)
             if (dueDate != null) {
-                intent.putExtra("dueDate", dueDate.time)
+                intent.putExtra(KEY_DUE_DATE_IN_MILLIS, dueDate.time)
             }
             return intent
         }
     }
 
+    val model: EditTaskViewModel by lazy {
+        ViewModelProviders.of(this).get(EditTaskViewModel::class.java)
+    }
+
+    val binding: ActivityEditTaskBinding by lazy {
+        DataBindingUtil.setContentView<ActivityEditTaskBinding>(this, R.layout.activity_edit_task)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        model = ViewModelProviders.of(this).get(EditTaskViewModel::class.java)
-        setTheme(model.getThemeResId())
         super.onCreate(savedInstanceState)
 
-        val taskId = intent.extras.getString("taskId")
-        val longDate = intent.extras.getLong("dueDate")
-        val dueDate = if (longDate > 0) Date(longDate).endDayDate() else null
+        if (savedInstanceState == null) {
+            model.initStartDate(intent.extras)
+            model.initTask(intent.extras)
+        }
 
-        model.loadTask(taskId, dueDate)
-
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_task)
         binding.controller = this
         binding.model = model
 
@@ -77,7 +80,6 @@ class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener, CheckBoxC
         model.getTaskResponse().observe(this, Observer<Task> { task ->
             if (task != null) {
                 binding.task = task
-                Logger.e("Refresh task")
             }
         })
     }
@@ -85,45 +87,32 @@ class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener, CheckBoxC
     private fun observeSubTaskResponse() {
         model.getSubTaskResponse().observe(this, Observer<List<Task>> { tasks ->
             subTaskAdapter.clearAndAdd(tasks)
-            Logger.e("Refresh sub task")
         })
     }
 
     fun onTitleTextChanged(text: CharSequence) {
-        model.newTask.title = text.toString()
+        model.updateTitle(text.toString())
     }
 
     fun onDescriptionTextChanged(text: CharSequence) {
-        model.newTask.description = text.toString()
+        model.updateDescription(text.toString())
     }
 
-    fun onDateTimeButtonClick(view: View?) {
-        val currentDate = model.newTask.dueDate
+    fun onDateTimeButtonClick(view: View) {
+        val dueDate = model.newTask.dueDate
         val isAllDay = model.newTask.allDay
 
-        val dateTimePicker = DateTimePickerDialog(currentDate, isAllDay, onDateSelected = { date, allDay ->
-
-            model.newTask.allDay = allDay
-            model.newTask.dueDate = date
-
-            binding.task = model.newTask
-        }, onCanceled = {
-
-        })
-        dateTimePicker.show(supportFragmentManager, "DateTimePickerDialog")
+        startActivityForResult(DateTimeChooserActivity.getActivityIntent(this, dueDate, isAllDay),
+                CHOOSE_DATE_REQUEST_CODE)
     }
 
-    fun onRemoveDateButtonClick(view: View?) {
-        model.newTask.allDay = true
-        model.newTask.dueDate = null
-
-        binding.task = model.newTask
+    fun removeDueDate(view: View) {
+        model.removeDate()
     }
 
-    fun changeTaskPriority(view: View?) {
+    fun changeTaskPriority(view: View) {
         EditTaskPriorityDialog.showDialog(this, model.newTask.priority, onSuccess = { priority ->
-            model.newTask.priority = priority
-            binding.task = model.newTask
+            model.updatePriority(priority)
         })
     }
 
@@ -133,8 +122,6 @@ class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener, CheckBoxC
     }
 
     override fun onCheckBoxChecked(view: View, position: Int, isChecked: Boolean) {
-        ToastUtils.showSimpleToast(this, "Position: $position")
-
         val task = subTaskAdapter.getItem(position)
         model.insertOrUpdateSubTask(task)
     }
@@ -148,19 +135,7 @@ class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener, CheckBoxC
         })
     }
 
-    fun getDueDate(task: Task?): String {
-        return if (task != null && task.isPlaned()) {
-            if (task.allDay) {
-                task.dueDate!!.asString(DateUtils.SHORT_DATE_FORMAT3)
-            } else {
-                task.dueDate!!.asString(DateUtils.DATE_TIME_FORMAT)
-            }
-        } else {
-            getString(R.string.select_date)
-        }
-    }
-
-    fun saveTask(view: View?) {
+    fun saveTask(view: View) {
         model.insertOrUpdateTask(onSuccess = {
             finish()
         }, onError = { message ->
@@ -168,8 +143,17 @@ class EditTaskActivity : BaseActivity(), RecycleViewItemClickListener, CheckBoxC
         })
     }
 
-    fun addSubTaskButtonClick(view: View?) {
+    fun addSubTask(view: View) {
         showAddSubTaskDialog(null)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK && requestCode == CHOOSE_DATE_REQUEST_CODE) {
+            data?.let {
+                model.updateDueDate(it.extras)
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

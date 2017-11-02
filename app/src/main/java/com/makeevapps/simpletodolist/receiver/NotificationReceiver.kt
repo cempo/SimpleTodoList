@@ -49,7 +49,8 @@ class NotificationReceiver : BroadcastReceiver() {
         when (intent.action) {
             SNOOZE_NOTIFICATION_ACTION -> {
                 val taskId = intent.getStringExtra("taskId")
-                context.startActivity(SnoozeActivity.getActivityIntent(context, taskId))
+                context.startActivity(SnoozeActivity.getActivityIntent(context, taskId, true))
+
                 notificationUtils.hideNotification(context, NotificationUtils.TASK_NOTIFICATION_ID)
                 notificationUtils.collapsePanel(context)
             }

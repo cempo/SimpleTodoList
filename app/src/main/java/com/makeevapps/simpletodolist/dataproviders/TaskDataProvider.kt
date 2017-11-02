@@ -29,6 +29,7 @@ class TaskDataProvider : AbstractDataProvider() {
 
     private val taskComparator = compareBy<TaskData> { it.task.isComplete }
             .thenByDescending { it.task.doneDate }
+            .thenBy { it.task.dueDate == null }
             .thenBy { it.task.dueDate }
             .thenByDescending { it.task.priority.typeId }
             .thenBy { it.task.title }

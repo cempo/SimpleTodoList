@@ -5,6 +5,8 @@
 
     <style name="TextAppearance.MenuHeader"/>
 
+    <style name="TextAppearance.Item"/>
+
     <style name="TextAppearance.ListItem"/>
 
     <style name="TextAppearance.ListItem.TodayTasks"/>
@@ -71,6 +73,12 @@
     <style name="TextAppearance.TaskDetails.Description">
         <item name="android:textSize">@dimen/text_size_14sp</item>
         <item name="android:textColor">?android:textColorPrimaryInverse</item>
+    </style>
+
+    <style name="TextAppearance.Item.Text">
+        <item name="android:textSize">@dimen/text_size_16sp</item>
+        <item name="android:textColor">?textColorPrimary</item>
+        <item name="android:textColorHint">?textColorSecondary</item>
     </style>
 
     <style name="TextAppearance.ListItem.SubTasks.Title">

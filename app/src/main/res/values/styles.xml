@@ -64,7 +64,7 @@
         <item name="toolbarIconColor">#ffffff</item>
         <item name="toolbarTitleColor">#ffffff</item>
         <item name="toolbarEditTextLineColor">#ffffff</item>
-        <item name="iconColor">#ffffff</item>
+        <item name="iconColor">#ededed</item>
         <item name="iconColorInverse">#212121</item>
     </style>
 
@@ -221,11 +221,21 @@
         <item name="android:tint">?android:textColorSecondary</item>
     </style>
 
+    <style name="DetailItemCrossButtonStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:tint">?android:textColorSecondary</item>
+        <item name="android:background">@drawable/ripple_clip_child</item>
+    </style>
+    
     <style name="DetailItemTextStyle">
+        <item name="android:textAppearance">@style/TextAppearance.Item.Text</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:tint">?android:textColorSecondary</item>
     </style>
 
     <style name="DetailSubTaskItemStyle">
@@ -247,5 +257,21 @@
         <item name="android:textAppearance">@style/TextAppearance.ListItem.SubTasks.Title</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!-- Info screen -->
+    <style name="InfoScreenLayoutStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:paddingBottom">100dp</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center</item>
+        <item name="android:visibility">gone</item>
+    </style>
+    <style name="InfoScreenIconStyle">
+        <item name="android:layout_width">120dp</item>
+        <item name="android:layout_height">120dp</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:tint">?iconColor</item>
     </style>
 </resources>

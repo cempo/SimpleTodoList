@@ -1,9 +1,9 @@
 package com.makeevapps.simpletodolist.ui.activity
 
-import android.support.v4.widget.SwipeRefreshLayout
+import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import com.makeevapps.simpletodolist.R
+import com.makeevapps.simpletodolist.App
 
 open class BaseActivity : AppCompatActivity() {
     var isActivityVisible = false
@@ -13,13 +13,10 @@ open class BaseActivity : AppCompatActivity() {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }*/
 
-    /*override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
-
-        SharedPreferences.OnSharedPreferenceChangeListener({ sharedPreferences, key ->
-
-        })
-    }*/
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(App.instance.getCurrentThemeStyle().themeResId)
+        super.onCreate(savedInstanceState)
+    }
 
     fun setSupportActionBar(toolbar: Toolbar, homeAsUp: Boolean, homeEnabled: Boolean, title: String?) {
         setSupportActionBar(toolbar)

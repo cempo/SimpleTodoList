@@ -2,6 +2,7 @@ package com.makeevapps.simpletodolist.ui.fragment
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v14.preference.SwitchPreference
 import android.support.v4.app.TaskStackBuilder
 import android.support.v7.preference.ListPreference
 import android.support.v7.preference.Preference
@@ -16,6 +17,7 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClic
         Preference.OnPreferenceChangeListener {
     private lateinit var model: SettingsViewModel
     private lateinit var themeListPreference: ListPreference
+    private lateinit var is24HourFormat: SwitchPreference
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preference_settings)
@@ -23,6 +25,10 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClic
 
         themeListPreference = findPreference(getString(R.string.themeId)) as ListPreference
         themeListPreference.onPreferenceChangeListener = this
+
+        is24HourFormat = findPreference(getString(R.string.is24HourFormat)) as SwitchPreference
+        is24HourFormat.onPreferenceChangeListener = this
+
         findPreference(getString(R.string.aboutScreen)).onPreferenceClickListener = this
     }
 
@@ -30,11 +36,11 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClic
         when (preference?.key) {
             getString(R.string.themeId) -> {
                 model.saveThemeId(newValue.toString())
-
-                TaskStackBuilder.create(context!!)
-                        .addNextIntent(MainActivity.getActivityIntent(context!!, false))
-                        .addNextIntent(SettingsActivity.getActivityIntent(context!!))
-                        .startActivities()
+                restartApp()
+            }
+            getString(R.string.is24HourFormat) -> {
+                is24HourFormat.isChecked = newValue as Boolean
+                model.saveIs24HourFormat(newValue)
             }
         }
         return false
@@ -47,5 +53,12 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClic
             }
         }
         return false
+    }
+
+    fun restartApp() {
+        TaskStackBuilder.create(context!!)
+                .addNextIntent(MainActivity.getActivityIntent(context!!, false))
+                .addNextIntent(SettingsActivity.getActivityIntent(context!!))
+                .startActivities()
     }
 }

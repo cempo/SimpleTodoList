@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import com.makeevapps.simpletodolist.R
+import com.makeevapps.simpletodolist.databinding.ActivityEditTaskBinding
 import com.makeevapps.simpletodolist.databinding.ActivityMainBinding
 import com.makeevapps.simpletodolist.databinding.ViewMenuHeaderBinding
 import com.makeevapps.simpletodolist.enums.MainMenuItemType
@@ -19,6 +20,7 @@ import com.makeevapps.simpletodolist.ui.fragment.CalendarFragment
 import com.makeevapps.simpletodolist.ui.fragment.TodayFragment
 import com.makeevapps.simpletodolist.utils.DateUtils
 import com.makeevapps.simpletodolist.utils.UIUtils
+import com.makeevapps.simpletodolist.viewmodel.EditTaskViewModel
 import com.makeevapps.simpletodolist.viewmodel.MainViewModel
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
@@ -29,9 +31,6 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 
 
 class MainActivity : BaseActivity() {
-    lateinit var model: MainViewModel
-    lateinit var binding: ActivityMainBinding
-
     private lateinit var drawer: Drawer
 
     companion object {
@@ -42,12 +41,17 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    val model: MainViewModel by lazy {
+        ViewModelProviders.of(this).get(MainViewModel::class.java)
+    }
+
+    val binding: ActivityMainBinding by lazy {
+        DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        model = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        setTheme(model.getThemeResId())
         super.onCreate(savedInstanceState)
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.controller = this
         binding.model = model
 
