@@ -34,4 +34,6 @@ class PreferenceManager(val context: Context) : IDataManager {
     override fun setIs24HourFormat(is24: Boolean) {
         manager.edit().putBoolean(context.getString(R.string.is24HourFormat), is24).apply()
     }
+
+    fun getSharedPreferences() = manager
 }

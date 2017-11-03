@@ -4,23 +4,20 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import com.makeevapps.simpletodolist.R
-import com.makeevapps.simpletodolist.databinding.ActivityEditTaskBinding
 import com.makeevapps.simpletodolist.databinding.ActivityMainBinding
 import com.makeevapps.simpletodolist.databinding.ViewMenuHeaderBinding
 import com.makeevapps.simpletodolist.enums.MainMenuItemType
-import com.makeevapps.simpletodolist.enums.ThemeStyle
 import com.makeevapps.simpletodolist.ui.fragment.CalendarFragment
 import com.makeevapps.simpletodolist.ui.fragment.TodayFragment
 import com.makeevapps.simpletodolist.utils.DateUtils
 import com.makeevapps.simpletodolist.utils.UIUtils
-import com.makeevapps.simpletodolist.viewmodel.EditTaskViewModel
 import com.makeevapps.simpletodolist.viewmodel.MainViewModel
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
@@ -30,7 +27,7 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
     private lateinit var drawer: Drawer
 
     companion object {
@@ -55,6 +52,8 @@ class MainActivity : BaseActivity() {
         binding.controller = this
         binding.model = model
 
+        model.preferenceManager.getSharedPreferences().registerOnSharedPreferenceChangeListener(this)
+
         val headerBinding = DataBindingUtil.inflate<ViewMenuHeaderBinding>(LayoutInflater.from(this), R.layout
                 .view_menu_header, null, false)
         headerBinding.controller = this
@@ -69,10 +68,10 @@ class MainActivity : BaseActivity() {
                 .withHasStableIds(true)
                 .withSavedInstance(savedInstanceState)
                 .addDrawerItems(
-                        createMenuItemByType(MainMenuItemType.TODAY),
-                        createMenuItemByType(MainMenuItemType.CALENDAR),
+                        createMenuItemByType(MainMenuItemType.TODAY, true),
+                        createMenuItemByType(MainMenuItemType.CALENDAR, true),
                         DividerDrawerItem(),
-                        createMenuItemByType(MainMenuItemType.SETTINGS)
+                        createMenuItemByType(MainMenuItemType.SETTINGS, false)
                 )
                 .withSelectedItem(1)
                 .withOnDrawerItemClickListener { view, position, drawerItem ->
@@ -91,12 +90,12 @@ class MainActivity : BaseActivity() {
         observeTaskData()
     }
 
-    private fun createMenuItemByType(type: MainMenuItemType): PrimaryDrawerItem {
+    private fun createMenuItemByType(type: MainMenuItemType, selectable: Boolean): PrimaryDrawerItem {
         return PrimaryDrawerItem()
                 .withIdentifier(type.id)
                 .withName(type.textResId)
                 .withIcon(type.imageResId)
-                .withSelectable(true)
+                .withSelectable(selectable)
                 .withIconTintingEnabled(true)
     }
 
@@ -126,13 +125,19 @@ class MainActivity : BaseActivity() {
         //val lastFragment = supportFragmentManager.findFragmentById(R.id.container)
         supportFragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
-                .commitNow()
+                .commitNowAllowingStateLoss()
     }
 
     fun setToolbar(toolbar: Toolbar, homeAsUp: Boolean, homeEnabled: Boolean, title: String?) {
         setSupportActionBar(toolbar, homeAsUp, homeEnabled, title)
         drawer.setToolbar(this, toolbar, true)
-       //drawer.drawerLayout.setStatusBarBackgroundColor(ContextCompat.getColor(this, R.color.status_bar))
+        //drawer.drawerLayout.setStatusBarBackgroundColor(ContextCompat.getColor(this, R.color.status_bar))
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        if (!key.isNullOrEmpty() && key == getString(R.string.is24HourFormat)) {
+            selectMenuItem(MainMenuItemType.getItemById(drawer.currentSelection))
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -146,5 +151,10 @@ class MainActivity : BaseActivity() {
         } else {
             super.onBackPressed()
         }
+    }
+
+    override fun onDestroy() {
+        model.preferenceManager.getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this)
+        super.onDestroy()
     }
 }

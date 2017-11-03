@@ -9,8 +9,7 @@
             android:defaultValue="1"/>
         <SwitchPreference
             android:key="@string/is24HourFormat"
-            android:title="@string/use_24h_format"
-            android:defaultValue="true" />
+            android:title="@string/use_24h_format"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/other">
         <PreferenceScreen
