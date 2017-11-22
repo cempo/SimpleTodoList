@@ -59,17 +59,13 @@ class SnoozeActivity : AppCompatActivity() {
             if (task != null) {
                 binding.task = task
 
-                showDateTimePicker()
+                val dueDate = model.task.dueDate
+                val isAllDay = model.task.allDay
+
+                startActivityForResult(DateTimeChooserActivity.getActivityIntent(this, dueDate, isAllDay),
+                        DateTimeChooserActivity.CHOOSE_DATE_REQUEST_CODE)
             }
         })
-    }
-
-    private fun showDateTimePicker() {
-        val dueDate = model.task.dueDate
-        val isAllDay = model.task.allDay
-
-        startActivityForResult(DateTimeChooserActivity.getActivityIntent(this, dueDate, isAllDay),
-                DateTimeChooserActivity.CHOOSE_DATE_REQUEST_CODE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

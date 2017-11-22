@@ -18,19 +18,16 @@ open class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
     }
 
-    fun setSupportActionBar(toolbar: Toolbar, homeAsUp: Boolean, homeEnabled: Boolean, title: String?) {
+    fun setSupportActionBar(toolbar: Toolbar, homeAsUp: Boolean, homeEnabled: Boolean, titleText: String?) {
         setSupportActionBar(toolbar)
 
-        val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(homeAsUp)
-            actionBar.setHomeButtonEnabled(homeEnabled)
-            if (title == null) {
-                actionBar.setDisplayShowTitleEnabled(false)
-            }
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(homeAsUp)
+            setHomeButtonEnabled(homeEnabled)
+            setDisplayShowTitleEnabled(!titleText.isNullOrEmpty())
 
-            if (!title.isNullOrEmpty()) {
-                actionBar.title = title
+            if (!titleText.isNullOrEmpty()) {
+                title = titleText
             }
         }
     }

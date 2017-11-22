@@ -35,9 +35,7 @@ class DateTimeChooserActivity : AppCompatActivity() {
     }
 
     val binding: ActivityDateTimeChooserBinding by lazy {
-        DataBindingUtil.setContentView<ActivityDateTimeChooserBinding>(
-                this, R.layout.activity_date_time_chooser
-        )
+        DataBindingUtil.setContentView<ActivityDateTimeChooserBinding>(this, R.layout.activity_date_time_chooser)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

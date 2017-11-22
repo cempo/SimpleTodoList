@@ -27,7 +27,6 @@ class SnoozeViewModel : ViewModel() {
     private val compositeDisposable = CompositeDisposable()
 
     lateinit var task: Task
-    var taskId: String? = null
     var position: Int? = null
 
     init {
@@ -36,9 +35,9 @@ class SnoozeViewModel : ViewModel() {
 
     fun initTask(extras: Bundle) {
         position = extras.getInt(KEY_POSITION)
-        taskId = extras.getString(KEY_TASK_ID)
+        val taskId = extras.getString(KEY_TASK_ID)
 
-        compositeDisposable.add(taskRepository.getTaskByIdOnce(taskId!!).subscribe(
+        compositeDisposable.add(taskRepository.getTaskByIdOnce(taskId).subscribe(
                 { result ->
                     task = result
                     taskResponse.value = result
