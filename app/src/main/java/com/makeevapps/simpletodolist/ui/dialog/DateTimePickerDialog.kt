@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.DialogInterface
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,6 @@ import com.makeevapps.simpletodolist.R
 import com.makeevapps.simpletodolist.databinding.ViewDatePickerTimeButtonBinding
 import com.makeevapps.simpletodolist.utils.DateUtils
 import com.makeevapps.simpletodolist.utils.ToastUtils
-import com.makeevapps.simpletodolist.viewmodel.DateTimeChooserViewModel
 import com.makeevapps.simpletodolist.viewmodel.DateTimePickerViewModel
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import java.util.*

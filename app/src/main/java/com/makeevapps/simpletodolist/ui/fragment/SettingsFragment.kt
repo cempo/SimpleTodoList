@@ -7,8 +7,6 @@ import android.support.v4.app.TaskStackBuilder
 import android.support.v7.preference.ListPreference
 import android.support.v7.preference.Preference
 import android.support.v7.preference.PreferenceFragmentCompat
-import android.support.v7.preference.PreferenceManager
-import android.text.format.DateFormat
 import com.makeevapps.simpletodolist.R
 import com.makeevapps.simpletodolist.ui.activity.AboutActivity
 import com.makeevapps.simpletodolist.ui.activity.MainActivity

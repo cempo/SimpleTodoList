@@ -16,7 +16,6 @@ import com.makeevapps.simpletodolist.Keys.KEY_TASK_ID
 import com.makeevapps.simpletodolist.R
 import com.makeevapps.simpletodolist.databinding.ActivityEditTaskBinding
 import com.makeevapps.simpletodolist.datasource.db.table.Task
-import com.makeevapps.simpletodolist.enums.ThemeStyle
 import com.makeevapps.simpletodolist.interfaces.CheckBoxCheckedListener
 import com.makeevapps.simpletodolist.interfaces.RecycleViewItemClickListener
 import com.makeevapps.simpletodolist.ui.activity.DateTimeChooserActivity.Companion.CHOOSE_DATE_REQUEST_CODE
@@ -25,7 +24,6 @@ import com.makeevapps.simpletodolist.ui.dialog.CancelChangesDialog
 import com.makeevapps.simpletodolist.ui.dialog.EditSubTaskDialog
 import com.makeevapps.simpletodolist.ui.dialog.EditTaskPriorityDialog
 import com.makeevapps.simpletodolist.utils.ToastUtils
-import com.makeevapps.simpletodolist.viewmodel.DateTimeChooserViewModel
 import com.makeevapps.simpletodolist.viewmodel.EditTaskViewModel
 import kotlinx.android.synthetic.main.toolbar.*
 import java.util.*

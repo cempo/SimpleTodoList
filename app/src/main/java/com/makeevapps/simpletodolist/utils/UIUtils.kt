@@ -27,7 +27,7 @@ object UIUtils {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dip.toFloat(), context.resources.displayMetrics).toInt()
     }
 
-    fun getDimen(context: Context, resId: Int) : Int {
+    fun getDimen(context: Context, resId: Int): Int {
         return (context.resources.getDimension(resId) / context.resources.displayMetrics.density).toInt()
     }
 }

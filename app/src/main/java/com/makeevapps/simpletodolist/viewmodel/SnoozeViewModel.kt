@@ -10,7 +10,6 @@ import com.makeevapps.simpletodolist.Keys.KEY_POSITION
 import com.makeevapps.simpletodolist.Keys.KEY_TASK_ID
 import com.makeevapps.simpletodolist.datasource.db.table.Task
 import com.makeevapps.simpletodolist.datasource.preferences.PreferenceManager
-import com.makeevapps.simpletodolist.enums.ThemeStyle
 import com.makeevapps.simpletodolist.repository.TaskRepository
 import io.reactivex.disposables.CompositeDisposable
 import java.util.*

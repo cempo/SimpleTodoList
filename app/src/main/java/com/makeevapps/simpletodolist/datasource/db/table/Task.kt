@@ -87,7 +87,7 @@ class Task() {
         return dueDate != null && dueDate!! > startDayDate && dueDate!! <= endDayDate
     }
 
-    fun switchDoneState(){
+    fun switchDoneState() {
         if (isDone()) {
             isComplete = false
             doneDate = null
@@ -97,7 +97,7 @@ class Task() {
         }
     }
 
-    fun markAsDone(){
+    fun markAsDone() {
         isComplete = true
         doneDate = DateUtils.currentTime()
     }

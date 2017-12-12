@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModel
 import com.makeevapps.simpletodolist.App
 import com.makeevapps.simpletodolist.BuildConfig
 import com.makeevapps.simpletodolist.datasource.preferences.PreferenceManager
-import com.makeevapps.simpletodolist.enums.ThemeStyle
 import com.makeevapps.simpletodolist.utils.DeviceInfo
 import javax.inject.Inject
 

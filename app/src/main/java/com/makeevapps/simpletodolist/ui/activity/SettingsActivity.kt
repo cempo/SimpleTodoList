@@ -6,8 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import com.makeevapps.simpletodolist.R
-import com.makeevapps.simpletodolist.enums.ThemeStyle
-import com.makeevapps.simpletodolist.viewmodel.MainViewModel
 import com.makeevapps.simpletodolist.viewmodel.SettingsViewModel
 import kotlinx.android.synthetic.main.toolbar.*
 

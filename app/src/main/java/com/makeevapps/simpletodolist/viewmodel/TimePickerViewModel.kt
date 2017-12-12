@@ -7,8 +7,6 @@ import com.makeevapps.simpletodolist.Keys
 import com.makeevapps.simpletodolist.datasource.preferences.PreferenceManager
 import com.makeevapps.simpletodolist.enums.ThemeStyle
 import com.makeevapps.simpletodolist.utils.DateUtils
-import com.makeevapps.simpletodolist.utils.extension.toEndDay
-import io.reactivex.subjects.BehaviorSubject
 import java.util.*
 import javax.inject.Inject
 

@@ -7,10 +7,8 @@ import com.makeevapps.simpletodolist.App
 import com.makeevapps.simpletodolist.Keys
 import com.makeevapps.simpletodolist.Keys.KEY_ALL_DAY
 import com.makeevapps.simpletodolist.Keys.KEY_DUE_DATE_IN_MILLIS
-import com.makeevapps.simpletodolist.Keys.KEY_EMPTY
 import com.makeevapps.simpletodolist.Keys.KEY_POSITION
 import com.makeevapps.simpletodolist.datasource.preferences.PreferenceManager
-import com.makeevapps.simpletodolist.enums.ThemeStyle
 import java.util.*
 import javax.inject.Inject
 

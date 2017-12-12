@@ -8,7 +8,6 @@ import com.makeevapps.simpletodolist.App
 import com.makeevapps.simpletodolist.Keys.KEY_ALL_DAY
 import com.makeevapps.simpletodolist.Keys.KEY_DUE_DATE_IN_MILLIS
 import com.makeevapps.simpletodolist.datasource.preferences.PreferenceManager
-import com.makeevapps.simpletodolist.enums.ThemeStyle
 import com.makeevapps.simpletodolist.utils.DateUtils
 import com.makeevapps.simpletodolist.utils.extension.asString
 import com.makeevapps.simpletodolist.utils.extension.toEndDay

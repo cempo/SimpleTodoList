@@ -7,7 +7,7 @@ buildscript {
         buildToolsVersion = '26.0.2'
         supportVersion = '27.0.1'
         playServicesVersion = '11.0.4'
-        kotlinVersion = '1.1.60'
+        kotlinVersion = '1.2.0'
         architectureVersion = '1.0.0'
         daggerVersion = '2.11'
     }
@@ -18,9 +18,9 @@ buildscript {
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath 'com.android.tools.build:gradle:3.0.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath 'io.fabric.tools:gradle:1.24.5'
+        classpath 'io.fabric.tools:gradle:1.25.1'
         classpath 'com.google.gms:google-services:3.1.1'
     }
 }

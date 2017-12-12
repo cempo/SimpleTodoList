@@ -6,7 +6,6 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.MenuItem
-import com.makeevapps.simpletodolist.App
 import com.makeevapps.simpletodolist.R
 import com.makeevapps.simpletodolist.databinding.ActivityAboutBinding
 import com.makeevapps.simpletodolist.viewmodel.AboutViewModel

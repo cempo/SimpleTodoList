@@ -27,7 +27,7 @@ object AlertDialog {
 
     @Synchronized
     fun showCancelChangesDialog(context: Context, permissionName: String,
-                                      positiveCallback: MaterialDialog.SingleButtonCallback?) {
+                                positiveCallback: MaterialDialog.SingleButtonCallback?) {
         val title = R.string.permission_rationale_title
         val text = R.string.permission_rationale_text
         val buttonText = R.string.settings

@@ -18,23 +18,27 @@ object ErrorDialog {
     private var dialog: MaterialDialog? = null
     private var mHandler: Handler? = null
 
-    @Synchronized fun showDialog(context: Context, text: String) {
+    @Synchronized
+    fun showDialog(context: Context, text: String) {
         showDialog(context, text, null)
     }
 
-    @Synchronized fun showDialog(context: Context, textResId: Int) {
+    @Synchronized
+    fun showDialog(context: Context, textResId: Int) {
         showDialog(context, textResId, null)
     }
 
-    @Synchronized fun showDialog(context: Context, text: String,
-                                 positiveCallback: SingleButtonCallback?) {
+    @Synchronized
+    fun showDialog(context: Context, text: String,
+                   positiveCallback: SingleButtonCallback?) {
         val title = App.instance.getString(R.string.error_dialog_title)
 
         showDialog(context, title, text, positiveCallback, null)
     }
 
-    @Synchronized fun showDialog(context: Context, textResId: Int,
-                                 positiveCallback: SingleButtonCallback?) {
+    @Synchronized
+    fun showDialog(context: Context, textResId: Int,
+                   positiveCallback: SingleButtonCallback?) {
         val title = App.instance.getString(R.string.error_dialog_title)
 
         var text = ""
@@ -45,9 +49,10 @@ object ErrorDialog {
         showDialog(context, title, text, positiveCallback, null)
     }
 
-    @Synchronized fun showDialog(context: Context, titleResId: Int, textResId: Int,
-                                 positiveCallback: SingleButtonCallback,
-                                 onDismissListener: DialogInterface.OnDismissListener) {
+    @Synchronized
+    fun showDialog(context: Context, titleResId: Int, textResId: Int,
+                   positiveCallback: SingleButtonCallback,
+                   onDismissListener: DialogInterface.OnDismissListener) {
         var title = ""
         if (titleResId != 0) {
             title = context.getString(titleResId)
@@ -60,9 +65,10 @@ object ErrorDialog {
         showDialog(context, title, text, positiveCallback, onDismissListener)
     }
 
-    @Synchronized fun showDialog(context: Context?, title: String, text: String,
-                                 positiveCallback: SingleButtonCallback?,
-                                 onDismissListener: DialogInterface.OnDismissListener?) {
+    @Synchronized
+    fun showDialog(context: Context?, title: String, text: String,
+                   positiveCallback: SingleButtonCallback?,
+                   onDismissListener: DialogInterface.OnDismissListener?) {
         dismissDialog()
 
         if (context != null) {
@@ -96,7 +102,8 @@ object ErrorDialog {
         }
     }
 
-    @Synchronized fun dismissDialog() {
+    @Synchronized
+    fun dismissDialog() {
         if (dialog != null && dialog!!.isShowing) {
             try {
                 dialog!!.dismiss()

@@ -2,7 +2,6 @@ package com.makeevapps.simpletodolist.reminders
 
 import android.app.AlarmManager
 import android.content.Context
-import com.makeevapps.simpletodolist.App
 
 /**
  * Helper to manage scheduling the reminder alarm

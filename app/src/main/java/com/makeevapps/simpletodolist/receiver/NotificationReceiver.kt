@@ -10,7 +10,6 @@ import com.makeevapps.simpletodolist.repository.TaskRepository
 import com.makeevapps.simpletodolist.ui.activity.SnoozeActivity
 import com.makeevapps.simpletodolist.utils.DateUtils
 import com.makeevapps.simpletodolist.utils.NotificationUtils
-import com.makeevapps.simpletodolist.utils.ToastUtils
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
