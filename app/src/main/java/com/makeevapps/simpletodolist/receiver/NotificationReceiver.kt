@@ -26,8 +26,8 @@ class NotificationReceiver : BroadcastReceiver() {
     }
 
     companion object {
-        val SNOOZE_NOTIFICATION_ACTION = BuildConfig.APPLICATION_ID + ".SNOOZE_NOTIFICATION"
-        val DONE_NOTIFICATION_ACTION = BuildConfig.APPLICATION_ID + ".DONE_NOTIFICATION"
+        const val SNOOZE_NOTIFICATION_ACTION = BuildConfig.APPLICATION_ID + ".SNOOZE_NOTIFICATION"
+        const val DONE_NOTIFICATION_ACTION = BuildConfig.APPLICATION_ID + ".DONE_NOTIFICATION"
 
         fun getSnoozeTaskPendingIntent(context: Context, taskId: String): PendingIntent {
             val snoozeIntent = Intent(context, NotificationReceiver::class.java)

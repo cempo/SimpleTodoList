@@ -1,7 +1,6 @@
 package com.makeevapps.simpletodolist.ui.adapter
 
 import android.content.Context
-import android.databinding.DataBindingUtil
 import android.graphics.Paint
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
@@ -45,9 +44,8 @@ class TodayTaskAdapter(val context: Context, val is24HoursFormat: Boolean,
         notifyDataSetChanged()
     }
 
-    inner class MyViewHolder(val view: View) : AbstractSwipeableItemViewHolder(view), View.OnClickListener {
-        val binding: ListItemTodayTaskBinding = DataBindingUtil.bind(view)
-
+    inner class MyViewHolder(val binding: ListItemTodayTaskBinding) : AbstractSwipeableItemViewHolder(binding.root), View
+    .OnClickListener {
         init {
             binding.contentLayout.setOnClickListener(this)
         }
@@ -56,7 +54,7 @@ class TodayTaskAdapter(val context: Context, val is24HoursFormat: Boolean,
 
         override fun onClick(view: View?) {
             val vh = RecyclerViewAdapterUtils.getViewHolder(view)
-            if (vh != null) {
+            vh?.let {
                 val flatPosition = vh.adapterPosition
                 if (flatPosition != RecyclerView.NO_POSITION) {
                     eventListener.onItemClicked(view, flatPosition)
@@ -69,7 +67,7 @@ class TodayTaskAdapter(val context: Context, val is24HoursFormat: Boolean,
         val inflater = LayoutInflater.from(parent.context)
         val binding = ListItemTodayTaskBinding.inflate(inflater, parent, false)
         //val binding: ListItemTodayTaskBinding = DataBindingUtil.inflate(inflater, R.layout.list_item_today_task, parent, false)
-        return MyViewHolder(binding.root)
+        return MyViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
@@ -93,13 +91,13 @@ class TodayTaskAdapter(val context: Context, val is24HoursFormat: Boolean,
         }
 
         if (!dateString.isEmpty()) {
-            holder.binding.dateTextView?.visibility = View.VISIBLE
-            holder.binding.dateTextView?.text = dateString
+            holder.binding.dateTextView.visibility = View.VISIBLE
+            holder.binding.dateTextView.text = dateString
         } else {
-            holder.binding.dateTextView?.visibility = View.GONE
+            holder.binding.dateTextView.visibility = View.GONE
         }
 
-        holder.binding.dateTextView?.setTextColor(if (isExpired) textColorExpiredTask else textColorSecondary)
+        holder.binding.dateTextView.setTextColor(if (isExpired) textColorExpiredTask else textColorSecondary)
 
         when {
             item.task.isDone() -> {

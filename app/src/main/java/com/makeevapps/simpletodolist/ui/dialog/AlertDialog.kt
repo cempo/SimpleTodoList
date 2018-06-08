@@ -34,32 +34,6 @@ object AlertDialog {
         showDialog(context, title, text, buttonText, positiveCallback, null)
     }
 
-    /*@Synchronized
-    fun showDialog(context: Context, textResId: Int) {
-        showDialog(context, textResId, null)
-    }
-
-    @Synchronized
-    fun showDialog(context: Context, text: String,
-                   positiveCallback: MaterialDialog.SingleButtonCallback?) {
-        val title = App.instance.getString(R.string.error_dialog_title)
-
-        showDialog(context, title, text, positiveCallback, null)
-    }
-
-    @Synchronized
-    fun showDialog(context: Context, textResId: Int,
-                   positiveCallback: MaterialDialog.SingleButtonCallback?) {
-        val title = App.instance.getString(R.string.error_dialog_title)
-
-        var text = ""
-        if (textResId != 0) {
-            text = context.getString(textResId)
-        }
-
-        showDialog(context, title, text, positiveCallback, null)
-    }*/
-
     @Synchronized
     fun showDialog(context: Context, titleResId: Int, textResId: Int, buttonTextResId: Int,
                    positiveCallback: MaterialDialog.SingleButtonCallback?,

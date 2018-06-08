@@ -1,12 +1,3 @@
-buildscript {
-    repositories {
-        maven { url 'https://maven.fabric.io/public' }
-    }
-
-    dependencies {
-        classpath 'io.fabric.tools:gradle:1.+'
-    }
-}
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
@@ -23,7 +14,7 @@ android {
     defaultConfig {
         applicationId "com.makeevapps.simpletodolist"
         minSdkVersion 21
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -53,6 +44,7 @@ android {
             debuggable true
             minifyEnabled false
             shrinkResources false
+            useProguard false
             signingConfig signingConfigs.debug
             //ext.enableCrashlytics = false
         }
@@ -60,7 +52,6 @@ android {
 
     dataBinding {
         enabled = true
-        version = "2.3.2"
     }
 
     packagingOptions {
@@ -99,70 +90,64 @@ kapt {
 
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     //Core
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
-    //compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    kapt "com.android.databinding:compiler:$android.dataBinding.version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 
-    compile "android.arch.lifecycle:runtime:$architectureVersion"
-    compile "android.arch.lifecycle:extensions:$architectureVersion"
+    implementation "android.arch.lifecycle:runtime:$lifecycleVersion"
+    implementation "android.arch.lifecycle:extensions:$lifecycleVersion"
     kapt "android.arch.lifecycle:compiler:$architectureVersion"
-    annotationProcessor "android.arch.lifecycle:compiler:$architectureVersion"
 
-    compile "android.arch.persistence.room:runtime:$architectureVersion"
+    implementation "android.arch.persistence.room:runtime:$architectureVersion"
     kapt "android.arch.persistence.room:compiler:$architectureVersion"
-    annotationProcessor "android.arch.persistence.room:compiler:$architectureVersion"
 
-    compile "android.arch.persistence.room:rxjava2:$architectureVersion"
-    compile "android.arch.lifecycle:reactivestreams:$architectureVersion"
+    implementation "android.arch.persistence.room:rxjava2:$architectureVersion"
+    implementation "android.arch.lifecycle:reactivestreams:$architectureVersion"
 
     // RXJava
-    compile 'io.reactivex.rxjava2:rxjava:2.1.0'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
 
     //Dagger 2
-    compile "com.google.dagger:dagger:$daggerVersion"
-    compile "com.google.dagger:dagger-android:$daggerVersion"
-    compile "com.google.dagger:dagger-android-support:$daggerVersion"
-    //annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
-    //annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+    implementation "com.google.dagger:dagger:$daggerVersion"
+    implementation "com.google.dagger:dagger-android:$daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$daggerVersion"
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
 
     //Support
-    compile "com.android.support:support-v4:$supportVersion"
-    compile "com.android.support:appcompat-v7:$supportVersion"
-    compile "com.android.support:preference-v14:$supportVersion"
-    compile "com.android.support:design:$supportVersion"
-    compile "com.android.support:recyclerview-v7:$supportVersion"
+    implementation "com.android.support:support-v4:$supportVersion"
+    implementation "com.android.support:appcompat-v7:$supportVersion"
+    implementation "com.android.support:preference-v14:$supportVersion"
+    implementation "com.android.support:design:$supportVersion"
+    implementation "com.android.support:recyclerview-v7:$supportVersion"
 
     //UI
-    compile('com.mikepenz:materialdrawer:5.9.5@aar') {
+    implementation('com.mikepenz:materialdrawer:5.9.5@aar') {
         transitive = true
     }
-    compile 'com.afollestad.material-dialogs:core:0.9.5.0'
-    compile 'uk.co.samuelwall:material-tap-target-prompt:2.3.0'
-    compile 'com.github.QuadFlask:colorpicker:0.0.13'
-    compile 'com.github.h6ah4i:android-advancedrecyclerview:develop-SNAPSHOT'
-    compile ('co.infinum:materialdatetimepicker-support:3.3.0') {
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+    implementation 'uk.co.samuelwall:material-tap-target-prompt:2.3.0'
+    implementation 'com.github.QuadFlask:colorpicker:0.0.13'
+    implementation 'com.github.h6ah4i:android-advancedrecyclerview:develop-SNAPSHOT'
+    implementation ('co.infinum:materialdatetimepicker-support:3.3.0') {
         exclude group: 'com.android.support'
     }
-    compile 'devs.mulham.horizontalcalendar:horizontalcalendar:1.1.8'
+    implementation 'devs.mulham.horizontalcalendar:horizontalcalendar:1.3.4'
 
     //Utils
-    compile('com.kishan.askpermission:askpermission:1.0.3', {
+    implementation('com.kishan.askpermission:askpermission:1.0.3', {
         exclude group: 'com.android.support'
     })
-    compile 'com.orhanobut:logger:2.1.1'
+    implementation 'com.orhanobut:logger:2.1.1'
 
     //Tests
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testCompile 'junit:junit:4.12'
-    compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
+    testImplementation 'junit:junit:4.12'
+    implementation('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
         transitive = true
     }
 }

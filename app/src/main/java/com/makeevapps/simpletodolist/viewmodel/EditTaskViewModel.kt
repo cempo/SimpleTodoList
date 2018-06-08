@@ -11,7 +11,6 @@ import com.makeevapps.simpletodolist.R
 import com.makeevapps.simpletodolist.datasource.db.table.Task
 import com.makeevapps.simpletodolist.datasource.preferences.PreferenceManager
 import com.makeevapps.simpletodolist.enums.TaskPriority
-import com.makeevapps.simpletodolist.enums.ThemeStyle
 import com.makeevapps.simpletodolist.repository.TaskRepository
 import com.makeevapps.simpletodolist.utils.DateUtils
 import com.makeevapps.simpletodolist.utils.extension.asString
@@ -46,8 +45,6 @@ class EditTaskViewModel : ViewModel() {
     /**
      * Init logic
      * */
-    fun getThemeResId(): Int = ThemeStyle.getThemeById(preferenceManager.getThemeId()).themeResId
-
     fun initStartDate(extras: Bundle) {
         val longDate = extras.getLong(KEY_DUE_DATE_IN_MILLIS)
         val dueDate = if (longDate > 0) Date(longDate).endDayDate() else null

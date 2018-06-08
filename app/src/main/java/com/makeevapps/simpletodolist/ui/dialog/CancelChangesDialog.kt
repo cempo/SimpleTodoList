@@ -22,7 +22,7 @@ object CancelChangesDialog {
         builder.content(R.string.cancel_your_changes)
 
         builder.positiveText(R.string.yes)
-        builder.onPositive({ dialog, which ->
+        builder.onPositive({ _, _ ->
             onSuccess()
         })
 

@@ -11,8 +11,6 @@ class DaoModule {
 
     @Provides
     @Singleton
-    internal fun provideTaskDao(database: AppDatabase): TaskDao {
-        return database.taskDao()
-    }
+    internal fun provideTaskDao(database: AppDatabase): TaskDao = database.taskDao()
 
 }

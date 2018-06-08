@@ -74,7 +74,7 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
                         createMenuItemByType(MainMenuItemType.SETTINGS, false)
                 )
                 .withSelectedItem(1)
-                .withOnDrawerItemClickListener { view, position, drawerItem ->
+                .withOnDrawerItemClickListener { _, _, drawerItem ->
                     if (drawerItem != null) {
                         val menuItem = MainMenuItemType.getItemById(drawerItem.identifier)
                         selectMenuItem(menuItem)
@@ -107,7 +107,7 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
         })
     }
 
-    fun selectMenuItem(menuItem: MainMenuItemType) {
+    private fun selectMenuItem(menuItem: MainMenuItemType) {
         when (menuItem) {
             MainMenuItemType.TODAY -> {
                 showFragment(TodayFragment.newInstance())
@@ -141,8 +141,8 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
-        val outState = drawer.saveInstanceState(outState)
-        super.onSaveInstanceState(outState)
+        val newOutState = drawer.saveInstanceState(outState)
+        super.onSaveInstanceState(newOutState)
     }
 
     override fun onBackPressed() {

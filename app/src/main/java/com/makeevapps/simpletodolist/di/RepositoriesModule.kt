@@ -12,8 +12,7 @@ class RepositoriesModule {
 
     @Provides
     @Singleton
-    internal fun provideTaskRepository(taskDao: TaskDao, alarmScheduler: AlarmScheduler): TaskRepository {
-        return TaskRepository(taskDao, alarmScheduler)
-    }
+    internal fun provideTaskRepository(taskDao: TaskDao, alarmScheduler: AlarmScheduler): TaskRepository =
+            TaskRepository(taskDao, alarmScheduler)
 
 }

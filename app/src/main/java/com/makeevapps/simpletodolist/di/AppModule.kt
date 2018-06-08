@@ -15,25 +15,17 @@ class AppModule(val application: Application) {
 
     @Provides
     @Singleton
-    internal fun provideContext(): Context {
-        return application
-    }
+    internal fun provideContext(): Context = application
 
     @Provides
     @Singleton
-    internal fun provideAppDatabase(context: Context): AppDatabase {
-        return AppDatabase.buildDatabase(context)
-    }
+    internal fun provideAppDatabase(context: Context): AppDatabase = AppDatabase.buildDatabase(context)
 
     @Provides
     @Singleton
-    internal fun providePreferencesManager(context: Context): PreferenceManager {
-        return PreferenceManager(context)
-    }
+    internal fun providePreferencesManager(context: Context): PreferenceManager = PreferenceManager(context)
 
     @Provides
     @Singleton
-    internal fun provideAlarmScheduler(context: Context): AlarmScheduler {
-        return AlarmScheduler(context)
-    }
+    internal fun provideAlarmScheduler(context: Context): AlarmScheduler = AlarmScheduler(context)
 }

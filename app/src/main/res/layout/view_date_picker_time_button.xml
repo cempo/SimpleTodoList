@@ -22,6 +22,6 @@
             android:layout_gravity="start|center_vertical"
             android:textColor="?colorAccent"
             android:text="@{model.allDay ? @string/time : model.timeText}"
-            android:onClick="@{controller::setTime}"/>
+            android:onClick="@{() -> controller.setTime()}"/>
     </LinearLayout>
 </layout>

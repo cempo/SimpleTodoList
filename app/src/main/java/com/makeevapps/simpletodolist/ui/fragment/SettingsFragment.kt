@@ -52,7 +52,7 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClic
         return false
     }
 
-    fun restartApp() {
+    private fun restartApp() {
         TaskStackBuilder.create(context!!)
                 .addNextIntent(MainActivity.getActivityIntent(context!!, false))
                 .addNextIntent(SettingsActivity.getActivityIntent(context!!))

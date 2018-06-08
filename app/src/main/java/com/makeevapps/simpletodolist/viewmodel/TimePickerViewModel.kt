@@ -5,7 +5,6 @@ import android.os.Bundle
 import com.makeevapps.simpletodolist.App
 import com.makeevapps.simpletodolist.Keys
 import com.makeevapps.simpletodolist.datasource.preferences.PreferenceManager
-import com.makeevapps.simpletodolist.enums.ThemeStyle
 import com.makeevapps.simpletodolist.utils.DateUtils
 import java.util.*
 import javax.inject.Inject
@@ -27,8 +26,6 @@ class TimePickerViewModel : ViewModel() {
     /**
      * Init logic
      * */
-    fun getThemeResId(): Int = ThemeStyle.getThemeById(preferenceManager.getThemeId()).themeResId
-
     fun initData(arguments: Bundle) {
         val longDate = arguments.getLong(Keys.KEY_DUE_DATE_IN_MILLIS)
         val oldDate = if (longDate > 0) Date(longDate) else null

@@ -131,7 +131,7 @@ class TodayFragment : Fragment(), RecycleViewEventListener {
         startActivity(EditTaskActivity.getActivityIntent(context!!, item.task.id))
     }
 
-    fun onAddButtonClick(view: View) {
+    fun onAddButtonClick() {
         startActivity(EditTaskActivity.getActivityIntent(context!!, null, DateUtils.currentTime()))
     }
 
@@ -154,13 +154,11 @@ class TodayFragment : Fragment(), RecycleViewEventListener {
         swipeManager.release()
         touchActionGuardManager.release()
 
-        if (binding.recyclerView != null) {
-            binding.recyclerView.itemAnimator = null
-            binding.recyclerView.adapter = null
+        binding.recyclerView.itemAnimator = null
+        binding.recyclerView.adapter = null
 
-            WrapperAdapterUtils.releaseAll(wrappedAdapter)
+        WrapperAdapterUtils.releaseAll(wrappedAdapter)
 
-            super.onDestroyView()
-        }
+        super.onDestroyView()
     }
 }

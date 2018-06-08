@@ -4,7 +4,6 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.makeevapps.simpletodolist.App
 import com.makeevapps.simpletodolist.datasource.preferences.PreferenceManager
-import com.makeevapps.simpletodolist.enums.ThemeStyle
 import com.makeevapps.simpletodolist.repository.TaskRepository
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
@@ -25,8 +24,6 @@ class MainViewModel : ViewModel() {
 
         compositeDisposable.add(taskRepository.getTodayTasksCount().subscribe({ result -> tasksCountResponse.value = result }))
     }
-
-    fun getThemeResId(): Int = ThemeStyle.getThemeById(preferenceManager.getThemeId()).themeResId
 
     fun getTasksCount(): MutableLiveData<Int> = tasksCountResponse
 

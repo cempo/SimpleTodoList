@@ -6,8 +6,6 @@ import android.support.v7.widget.Toolbar
 import com.makeevapps.simpletodolist.App
 
 open class BaseActivity : AppCompatActivity() {
-    var isActivityVisible = false
-
     /*@Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -38,14 +36,4 @@ open class BaseActivity : AppCompatActivity() {
                 R.color.refresh_progress_2,
                 R.color.refresh_progress_3)
     }*/
-
-    override fun onResume() {
-        super.onResume()
-        isActivityVisible = true
-    }
-
-    override fun onPause() {
-        isActivityVisible = false
-        super.onPause()
-    }
 }

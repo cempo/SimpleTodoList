@@ -71,7 +71,7 @@ class TimePickerCustomDialog : TimePickerDialog(), TimePickerDialog.OnTimeSetLis
         return view
     }
 
-    fun onAllDayButtonClick(view: View?) {
+    fun onAllDayButtonClick() {
         onTimeSelected(null)
         dismiss()
     }

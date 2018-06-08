@@ -38,7 +38,7 @@ class TaskDataProvider : AbstractDataProvider() {
 
     override fun getItem(index: Int): AbstractDataProvider.Data {
         if (index < 0 || index >= getCount()) {
-            throw IndexOutOfBoundsException("index = " + index)
+            throw IndexOutOfBoundsException("index = $index")
         }
 
         return data[index]

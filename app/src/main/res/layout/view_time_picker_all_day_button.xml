@@ -19,6 +19,6 @@
             android:layout_gravity="start|center_vertical"
             android:textColor="?colorAccent"
             android:text="@string/all_day"
-            android:onClick="@{controller.onAllDayButtonClick}"/>
+            android:onClick="@{() -> controller.onAllDayButtonClick()}"/>
     </LinearLayout>
 </layout>

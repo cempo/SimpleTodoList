@@ -30,7 +30,7 @@ import com.makeevapps.simpletodolist.ui.adapter.TodayTaskAdapter
 import com.makeevapps.simpletodolist.viewmodel.CalendarViewModel
 import com.orhanobut.logger.Logger
 import devs.mulham.horizontalcalendar.HorizontalCalendar
-import devs.mulham.horizontalcalendar.HorizontalCalendarListener
+import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener
 import kotlinx.android.synthetic.main.fragment_calendar.*
 import java.util.*
 
@@ -43,7 +43,7 @@ class CalendarFragment : Fragment(), RecycleViewEventListener {
     private lateinit var swipeManager: RecyclerViewSwipeManager
     private lateinit var touchActionGuardManager: RecyclerViewTouchActionGuardManager
 
-    lateinit var horizontalCalendar: HorizontalCalendar
+    private lateinit var horizontalCalendar: HorizontalCalendar
 
     companion object {
         fun newInstance(): CalendarFragment = CalendarFragment()
@@ -70,12 +70,12 @@ class CalendarFragment : Fragment(), RecycleViewEventListener {
         activity.setToolbar(toolbar, true, true, getString(R.string.calendar))
 
         setupCalendar()
-
         prepareRecyclerView()
+
         observeTasksResponse()
     }
 
-    fun setupCalendar() {
+    private fun setupCalendar() {
         val endDate = Calendar.getInstance()
         endDate.add(Calendar.MONTH, 1)
 
@@ -83,14 +83,22 @@ class CalendarFragment : Fragment(), RecycleViewEventListener {
         startDate.add(Calendar.MONTH, -1)
 
         horizontalCalendar = HorizontalCalendar.Builder(activity, R.id.calendarView)
-                .startDate(startDate.time)
-                .endDate(endDate.time)
+                .range(startDate, endDate)
+                .datesNumberOnScreen(5)
+                .configure()
+                .formatTopText("EEE")
+                .showBottomText(false)
+                .end()
                 .build()
+
         horizontalCalendar.calendarListener = object : HorizontalCalendarListener() {
-            override fun onDateSelected(date: Date, position: Int) {
-                model.loadTasks(date)
+            override fun onDateSelected(date: Calendar?, position: Int) {
+                date?.let {
+                    model.loadTasks(it.time)
+                }
             }
         }
+        model.loadTasks(Calendar.getInstance().time)
     }
 
     private fun prepareRecyclerView() {
@@ -158,8 +166,8 @@ class CalendarFragment : Fragment(), RecycleViewEventListener {
         startActivity(EditTaskActivity.getActivityIntent(context!!, item.task.id))
     }
 
-    fun onAddButtonClick(view: View?) {
-        startActivity(EditTaskActivity.getActivityIntent(context!!, null, horizontalCalendar.selectedDate))
+    fun onAddButtonClick() {
+        startActivity(EditTaskActivity.getActivityIntent(context!!, null, horizontalCalendar.selectedDate.time))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -184,7 +192,7 @@ class CalendarFragment : Fragment(), RecycleViewEventListener {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item != null) {
             when (item.itemId) {
-                R.id.today -> horizontalCalendar.goToday(false)
+                R.id.today -> horizontalCalendar.goToday(true)
             }
         }
 
@@ -196,17 +204,14 @@ class CalendarFragment : Fragment(), RecycleViewEventListener {
         swipeManager.release()
         touchActionGuardManager.release()
 
-        if (binding.recyclerView != null) {
-            binding.recyclerView.itemAnimator = null
-            binding.recyclerView.adapter = null
+        binding.recyclerView.itemAnimator = null
+        binding.recyclerView.adapter = null
 
-            WrapperAdapterUtils.releaseAll(wrappedAdapter)
-        }
+        WrapperAdapterUtils.releaseAll(wrappedAdapter)
     }
 
     override fun onDestroyView() {
         releaseRecyclerView()
-
         super.onDestroyView()
     }
 }

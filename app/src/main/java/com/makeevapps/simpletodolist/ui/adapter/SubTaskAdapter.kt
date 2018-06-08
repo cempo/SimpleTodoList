@@ -1,6 +1,5 @@
 package com.makeevapps.simpletodolist.ui.adapter
 
-import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -18,10 +17,10 @@ class SubTaskAdapter(private val itemClickListener: RecycleViewItemClickListener
         setHasStableIds(true)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        val inflater = LayoutInflater.from(parent!!.context)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
         val binding = ListItemSubTaskBinding.inflate(inflater, parent, false)
-        return ViewHolder(binding.root)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -34,16 +33,15 @@ class SubTaskAdapter(private val itemClickListener: RecycleViewItemClickListener
         }
     }
 
-    inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
-        val binding: ListItemSubTaskBinding = DataBindingUtil.bind(view)
+    inner class ViewHolder(val binding: ListItemSubTaskBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
         init {
             binding.itemLayout.setOnClickListener(this)
         }
 
         override fun onClick(view: View?) {
-            if (view != null) {
-                itemClickListener.onItemClick(view, adapterPosition)
+            view?.let {
+                itemClickListener.onItemClick(it, adapterPosition)
             }
         }
     }

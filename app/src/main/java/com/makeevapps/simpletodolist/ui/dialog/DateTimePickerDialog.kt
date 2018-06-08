@@ -85,7 +85,7 @@ class DateTimePickerDialog : DatePickerDialog(), DatePickerDialog.OnDateSetListe
         return view
     }
 
-    fun setTime(view: View) {
+    fun setTime() {
         val allDay = model.allDay.get()
         val selectedDate = model.calendar.value.time
         val startDate = if (allDay) DateUtils.setCurrentTime(selectedDate) else selectedDate

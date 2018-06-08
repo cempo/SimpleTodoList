@@ -25,9 +25,6 @@ class ScrollAwareFABBehavior(context: Context, attrs: AttributeSet) : FloatingAc
 
         if (dyConsumed > 0 && child.visibility == View.VISIBLE) {
             child.hide(object : FloatingActionButton.OnVisibilityChangedListener() {
-                override fun onShown(fab: FloatingActionButton?) {
-                    super.onShown(fab)
-                }
 
                 override fun onHidden(fab: FloatingActionButton?) {
                     super.onHidden(fab)
